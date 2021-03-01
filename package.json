@@ -4,6 +4,7 @@
   "description": "water map beach qwualtiy",
   "main": "index.js",
   "dependencies": {
+    "express": "^4.17.1",
     "vue": "^2.6.12"
   },
   "devDependencies": {},
