@@ -1,9 +1,13 @@
 {
   "ExpandedNodes": [
     "",
-    "\\BAckend",
-    "\\water_quality_map"
+    "\\Backend",
+    "\\water_quality_map",
+    "\\water_quality_map\\public",
+    "\\water_quality_map\\src",
+    "\\water_quality_map\\src\\assets",
+    "\\water_quality_map\\src\\components"
   ],
-  "SelectedNode": "\\BAckend\\index.js",
+  "SelectedNode": "\\water_quality_map\\src\\App.vue",
   "PreviewInSolutionExplorer": false
 }
