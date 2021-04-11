@@ -1,17 +1,16 @@
-<link href='https://api.mapbox.com/mapbox-gl-js/v2.1.1/mapbox-gl.css' rel='stylesheet' />
-
 <template>
-    <img alt="Vue logo" src="./assets/logo.png">
-    <HelloWorld msg="Welcome to Your Vue.js App" />
+    <Map/>
 </template>
 
 <script>
-    import HelloWorld from './components/HelloWorld.vue'
+    import Map from './components/Map.vue';
+    import dotenv from 'dotenv';
+    dotenv.config();
 
     export default {
         name: 'App',
         components: {
-            HelloWorld
+            Map
         }
     }
 </script>
@@ -23,6 +22,6 @@
         -moz-osx-font-smoothing: grayscale;
         text-align: center;
         color: #2c3e50;
-        margin-top: 60px;
+        margin: 0;
     }
 </style>
