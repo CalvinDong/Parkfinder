@@ -21,9 +21,9 @@ export default {
 
     new mapboxgl.Map({
       container: "mapContainer",
-      style: "mapbox://styles/mapbox/streets-v11",
+      style: "mapbox://styles/mapbox/outdoors-v11",
       center: [151.2,-33.9],
-      zoom: 10
+      zoom: 10,
     })
   }
 
