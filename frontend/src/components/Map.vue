@@ -19,11 +19,22 @@ export default {
   mounted(){
     mapboxgl.accessToken = this.accessToken;
 
-    new mapboxgl.Map({
+    let map = new mapboxgl.Map({
       container: "mapContainer",
       style: "mapbox://styles/mapbox/outdoors-v11",
       center: [151.2,-33.9],
       zoom: 10,
+    })
+
+    map.on('load', function () {
+      map.addSource('mapbox-dem', {
+      'type': 'raster-dem',
+      'url': 'mapbox://mapbox.mapbox-terrain-dem-v1',
+      'tileSize': 512,
+      'maxzoom': 14
+      });
+      // add the DEM source as a terrain layer with exaggerated height
+      map.setTerrain({ 'source': 'mapbox-dem', 'exaggeration': 1.5 });
     })
   }
 
