@@ -21,8 +21,8 @@ export default {
 
   methods: {
     async getJson(){
-      /*const dataJ = axios.get('https://api.mapbox.com/datasets/v1/kahuzi/{ckq7kkxb90fu321pfk1v7kqkt}/features?access_token=sk.eyJ1Ijoia2FodXppIiwiYSI6ImNrcXZ0dGk5NzBodmYycm5sYWh3aGFjNGIifQ.qwTMQaGERPVfsxAMCJvJPw')
-      //const dataJ = await axios.get("https://api.mapbox.com/datasets/v1/{kahuzi}?access_token=sk.eyJ1Ijoia2FodXppIiwiYSI6ImNrcXZ0dGk5NzBodmYycm5sYWh3aGFjNGIifQ.qwTMQaGERPVfsxAMCJvJPw")
+      /*const dataJ = axios.get(`https://api.mapbox.com/datasets/v1/kahuzi/{ckq7kkxb90fu321pfk1v7kqkt}/features?access_token=${process.env.VUE_APP_SECRETKEY}`)
+      //const dataJ = await axios.get(`https://api.mapbox.com/datasets/v1/{kahuzi}?access_token=${process.env.VUE_APP_SECRETKEY}`)
       console.log(dataJ)
       return dataJ*/  
 
