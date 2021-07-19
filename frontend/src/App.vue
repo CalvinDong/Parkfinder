@@ -1,16 +1,16 @@
 <template>
-    <Map/>
+    <MainPage/>
 </template>
 
 <script>
-    import Map from './components/Map.vue';
+    import MainPage from "./Views/MainPage"
     import dotenv from 'dotenv';
     dotenv.config();
 
     export default {
         name: 'App',
         components: {
-            Map
+            MainPage
         }
     }
 </script>
