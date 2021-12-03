@@ -23,7 +23,7 @@ exports.default = new class SqliteService {
     ReadAll() {
         return __awaiter(this, void 0, void 0, function* () {
             const readEverything = this.db.prepare("SELECT * FROM Base");
-            const result = yield readEverything.get();
+            const result = yield readEverything.all();
             return result;
         });
     }
