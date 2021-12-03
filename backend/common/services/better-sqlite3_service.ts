@@ -10,8 +10,7 @@ export default new class SqliteService{
     const readEverything = this.db.prepare(
       "SELECT * FROM Base"
     );
-
-    const result = readEverything.get()
+    const result = await readEverything.get()
     return result
   }
 
