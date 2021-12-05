@@ -5,7 +5,6 @@ import * as winston from 'winston';
 import * as expressWinston from 'express-winston';
 import cors from 'cors';
 import {CommonRoutesConfig} from './common/common.routes.config';
-import {UsersRoutes} from './routes/users.routes.config';
 import { QueryRoutes } from './routes/queryRoutes';
 import debug from 'debug';
 
@@ -41,7 +40,6 @@ app.use(expressWinston.logger(loggerOptions));
 
 // here we are adding the UserRoutes to our array,
 // after sending the Express.js application object to have the routes added to our app!
-routes.push(new UsersRoutes(app));
 routes.push(new QueryRoutes(app));
 
 // this is a simple route to make sure everything is working properly
