@@ -4,9 +4,7 @@
 
 <script>
 import mapboxgl from "mapbox-gl";
-import axios from "axios"
-
-//import geoTheJson from "../assets/features.geojson"
+//import axios from "axios"
 
 export default {
   name: "Map",
@@ -15,42 +13,15 @@ export default {
   data() {
     return {
       accessToken: `${process.env.VUE_APP_TOKEN}`,
-      testArray: ["https://raw.githubusercontent.com/CalvinDong/WaterMap/api_test/frontend/src/Files/test.geojson","https://raw.githubusercontent.com/CalvinDong/WaterMap/api_test/frontend/src/Files/testStuff.geojson"]
     };
   },
 
   methods: {
-    async getJson(){
-      /*const dataJ = axios.get(`https://api.mapbox.com/datasets/v1/kahuzi/{ckq7kkxb90fu321pfk1v7kqkt}/features?access_token=${process.env.VUE_APP_SECRETKEY}`)
-      //const dataJ = await axios.get(`https://api.mapbox.com/datasets/v1/{kahuzi}?access_token=${process.env.VUE_APP_SECRETKEY}`)
-      console.log(dataJ)
-      return dataJ*/  
 
-      axios
-        .get('https://api.coindesk.com/v1/bpi/currentprice.json')
-        .then(response => (console.log(response)))
-
-      axios
-        .get(`https://api.mapbox.com/datasets/v1/kahuzi/{ckq7kkxb90fu321pfk1v7kqkt}/features?access_token=${process.env.VUE_APP_SECRETKEY}`)
-        .then(response => (console.log(response)))
-        .catch(error => console.log(error))
-
-      axios.get(`https://api.mapbox.com/datasets/v1/kahuzi?access_token=${process.env.VUE_APP_SECRETKEY}`)
-        .then(response => (console.log(response)))
-    }
   },
 
   mounted(){
-    //let testData = this.getJson()
-    //console.log(testData)
-    console.log(this.testArray)
     mapboxgl.accessToken = this.accessToken;
-
-    /*this.testArray.forEach((link)=>{
-      console.log(link)
-      const strArr = link.split("/")
-      console.log(strArr[strArr.length - 1])
-    })*/
 
     let map = new mapboxgl.Map({
       container: "mapContainer",
