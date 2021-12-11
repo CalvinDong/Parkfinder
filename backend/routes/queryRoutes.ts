@@ -11,7 +11,9 @@ export class QueryRoutes extends CommonRoutesConfig {
       this.app.route(`/queries`)
       .get(QueryController.listAllParks)
       this.app.route(`/testFile`)
-      .get(QueryController.testFile)
+      .post(QueryController.testFile)
+      this.app.route(`/testFile/:id`)
+      .get(QueryController.getFile)
       
     return this.app;
   }

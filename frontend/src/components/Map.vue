@@ -13,18 +13,23 @@ export default {
   data() {
     return {
       accessToken: `${process.env.VUE_APP_TOKEN}`,
+      backend: "http://localhost:4000",
+      geoJSON: ""
     };
   },
 
   methods: {
-
+    async getFile(){
+      const res = await axios.post(`${this.backend}/testFile`)
+      return res.data
+    }
   },
 
   async mounted(){
     mapboxgl.accessToken = this.accessToken;
 
-    const res = await axios.get('http://localhost:4000/testFile')
-    console.log(res)
+    const getTestFile = await this.getFile()
+    console.log(getTestFile)
 
     let map = new mapboxgl.Map({
       container: "mapContainer",
@@ -33,8 +38,13 @@ export default {
       zoom: 10,
     })
 
-    map.on('load', function () {
+    map.on('load', async function () {
       //const testArray = ["https://raw.githubusercontent.com/CalvinDong/WaterMap/api_test/frontend/src/Files/test.geojson","https://raw.githubusercontent.com/CalvinDong/WaterMap/api_test/frontend/src/Files/testStuff.geojson"]
+
+      /*async function getFile(){
+        const res = await axios.post(`${this.backend}/testFile`)
+        return res.data
+      }*/
 
       map.addSource('mapbox-dem', {
       'type': 'raster-dem',
@@ -46,7 +56,7 @@ export default {
       map.addSource('testing', {
         type: 'geojson',
         // Use a URL for the value for the `data` property.
-        data: 'http://localhost:4000/testFile'
+        data: `http://localhost:4000/testfile/${getTestFile}`
       });
 
       map.addLayer({
@@ -57,29 +67,7 @@ export default {
             'fill-color': 'rgba(200, 100, 240, 0.4)',
             'fill-outline-color': 'rgba(200, 100, 240, 1)'
           },
-        });
-
-      /*testArray.forEach((link)=>{
-        console.log(link)
-        const strArr = link.split("/")
-        const name = strArr[strArr.length - 1]
-        console.log(name)
-
-        map.addSource(name, {
-          'type': 'geojson',
-          'data': link
-        });
-        
-        map.addLayer({
-          'id':  `${name}-layer`,
-          'type': 'fill',
-          'source': name,
-          'paint': {
-            'fill-color': 'rgba(200, 100, 240, 0.4)',
-            'fill-outline-color': 'rgba(200, 100, 240, 1)'
-          },
-        });
-      })*/
+      });
 
       map.addSource('earthquakes', {
         type: 'geojson',

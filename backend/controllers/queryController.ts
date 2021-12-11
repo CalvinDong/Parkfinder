@@ -1,5 +1,6 @@
 import {Request, Response} from "express"
 import SqliteService from "../common/services/better-sqlite3_service";
+import MemoryService from "../common/services/mem-service"
 import debug from 'debug';
 
 const log: debug.IDebugger = debug('app:users-controller');
@@ -131,7 +132,17 @@ export default new class QueryController {
     //let buffer = Buffer.from(testText, 'utf8')
     //res.setHeader( 'Content-Disposition', 'attachment; filename=testText.txt');
     //res.setHeader( 'Content-Type', 'text/html' );
+    let key = MemoryService.createEntry(testText)
+
+    res.status(200).send(key)
+  }
+
+  async getFile(req: Request, res: Response){
+    const key = req.params.id
+    const file = MemoryService.getEntry(key)
+    const deepCopy = file?.repeat(1)
+    MemoryService.deleteEntry(key)
     res.type('text.html')
-    res.status(200).send(testText)
+    res.status(200).send(deepCopy)
   }
 }
