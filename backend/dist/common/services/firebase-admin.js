@@ -7,7 +7,7 @@ exports.bucket = exports.db = void 0;
 //import { initializeApp } from 'firebase-admin/app'
 const firebase_admin_1 = __importDefault(require("firebase-admin"));
 const storage_1 = require("firebase-admin/storage");
-const serviceAccount = require('../../parkfinder-cd1be-firebase-adminsdk-k79gh-405a05f870.json');
+const serviceAccount = require('../../parkfinder-cd1be-firebase-adminsdk-k79gh-a7f6388c6b.json');
 firebase_admin_1.default.initializeApp({
     credential: firebase_admin_1.default.credential.cert(serviceAccount),
     storageBucket: 'gs://parkfinder-cd1be.appspot.com'

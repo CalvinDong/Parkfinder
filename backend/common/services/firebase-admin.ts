@@ -2,7 +2,7 @@
 import admin from 'firebase-admin'
 import { getStorage } from 'firebase-admin/storage'
 
-const serviceAccount = require('../../parkfinder-cd1be-firebase-adminsdk-k79gh-405a05f870.json')
+const serviceAccount = require('../../parkfinder-cd1be-firebase-adminsdk-k79gh-a7f6388c6b.json')
 
 admin.initializeApp({
   credential: admin.credential.cert(serviceAccount),

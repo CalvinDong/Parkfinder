@@ -4,7 +4,7 @@
 
 <script>
 import mapboxgl from "mapbox-gl";
-//import axios from "axios"
+import axios from "axios"
 
 export default {
   name: "Map",
@@ -20,8 +20,11 @@ export default {
 
   },
 
-  mounted(){
+  async mounted(){
     mapboxgl.accessToken = this.accessToken;
+
+    const res = await axios.get('http://localhost:4000/testFile')
+    console.log(res)
 
     let map = new mapboxgl.Map({
       container: "mapContainer",
@@ -31,7 +34,7 @@ export default {
     })
 
     map.on('load', function () {
-      const testArray = ["https://raw.githubusercontent.com/CalvinDong/WaterMap/api_test/frontend/src/Files/test.geojson","https://raw.githubusercontent.com/CalvinDong/WaterMap/api_test/frontend/src/Files/testStuff.geojson"]
+      //const testArray = ["https://raw.githubusercontent.com/CalvinDong/WaterMap/api_test/frontend/src/Files/test.geojson","https://raw.githubusercontent.com/CalvinDong/WaterMap/api_test/frontend/src/Files/testStuff.geojson"]
 
       map.addSource('mapbox-dem', {
       'type': 'raster-dem',
@@ -40,7 +43,23 @@ export default {
       'maxzoom': 14
       });
 
-      testArray.forEach((link)=>{
+      map.addSource('testing', {
+        type: 'geojson',
+        // Use a URL for the value for the `data` property.
+        data: 'http://localhost:4000/testFile'
+      });
+
+      map.addLayer({
+          'id':  `test-layer`,
+          'type': 'fill',
+          'source': 'testing',
+          'paint': {
+            'fill-color': 'rgba(200, 100, 240, 0.4)',
+            'fill-outline-color': 'rgba(200, 100, 240, 1)'
+          },
+        });
+
+      /*testArray.forEach((link)=>{
         console.log(link)
         const strArr = link.split("/")
         const name = strArr[strArr.length - 1]
@@ -60,7 +79,7 @@ export default {
             'fill-outline-color': 'rgba(200, 100, 240, 1)'
           },
         });
-      })
+      })*/
 
       map.addSource('earthquakes', {
         type: 'geojson',
