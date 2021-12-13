@@ -1,1 +1,5 @@
-POST http://localhost:4000/testFile
+//POST http://localhost:4000/testFile
+
+//GET http://localhost:4000/queries
+
+POST http://localhost:4000/filter

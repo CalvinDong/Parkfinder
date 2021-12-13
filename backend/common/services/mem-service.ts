@@ -7,6 +7,10 @@ export default new class MemoryService{
     this.memDB = new Map()
   }
 
+  private static checkKeyExists(key: String){
+    
+  }
+
   public createEntry(file: String){
     const key = uuidv4();
     this.memDB.set(key, file)

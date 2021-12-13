@@ -13,7 +13,7 @@ export class QueryRoutes extends CommonRoutesConfig {
       this.app.route(`/testFile`)
       .post(QueryController.testFile)
       this.app.route(`/filter`)
-      .post(QueryController.testFile)
+      .post(QueryController.processFilter)
       this.app.route(`/testFile/:id`)
       .get(QueryController.getFile)
       

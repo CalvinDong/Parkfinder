@@ -9,9 +9,12 @@ export default new class SqliteService{
   }
 
   public async ReadAll(){
-    const testStatement = "Parks, BBQ";
+    /*const testStatement = "Parks, BBQ";
     const readEverything = this.db.prepare(
       `SELECT * FROM ${testStatement}`
+    );*/
+    const readEverything = this.db.prepare(
+      `SELECT location FROM Parks`
     );
     const result = await readEverything.all()
     return result

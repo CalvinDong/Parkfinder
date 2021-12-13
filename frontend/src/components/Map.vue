@@ -20,7 +20,7 @@ export default {
 
   methods: {
     async getFile(){
-      const res = await axios.post(`${this.backend}/testFile`)
+      const res = await axios.post(`${this.backend}/filter`)
       return res.data
     }
   },
@@ -30,6 +30,7 @@ export default {
 
     const getTestFile = await this.getFile()
     console.log(getTestFile)
+    //await console.log(axios.get(`http://localhost:4000/testfile/${getTestFile}`))
 
     let map = new mapboxgl.Map({
       container: "mapContainer",
