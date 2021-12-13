@@ -19,163 +19,39 @@ const log = (0, debug_1.default)('app:users-controller');
 exports.default = new class QueryController {
     constructor() {
     }
-    static testThis() {
-        return __awaiter(this, void 0, void 0, function* () {
-            console.log("it do this");
-        });
-    }
     static aggregateFiles(locations) {
         return __awaiter(this, void 0, void 0, function* () {
+            const length = locations.length;
             const starter = `{
       "type": "FeatureCollection",
       "features": [
         `;
             const end = `]\n}`;
             let toSend = starter;
-            locations.forEach((located) => {
-                toSend += located.location;
-                toSend += ',\n';
-            });
+            for (let i = 0; i < length; i++) {
+                toSend += locations[i].location;
+                if (i == length - 1) {
+                    toSend += '\n';
+                }
+                else {
+                    toSend += ',\n';
+                }
+            }
             toSend += end;
-            console.log(toSend);
             return toSend;
         });
     }
     listAllParks(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
             const result = yield better_sqlite3_service_1.default.ReadAll(); // Could define Sqlite service using an interface (e.g. CRUD interface), will have to remove "new" from export line
-            console.log(result);
             res.status(200).send(result);
         });
     }
     processFilter(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
             const result = yield better_sqlite3_service_1.default.ReadAll(); // Could define Sqlite service using an interface (e.g. CRUD interface), will have to remove "new" from export line
-            console.log(result);
             const file = yield QueryController.aggregateFiles(result);
             let key = mem_service_1.default.createEntry(file);
-            res.status(200).send(key);
-        });
-    }
-    testFile(req, res) {
-        return __awaiter(this, void 0, void 0, function* () {
-            const testText = `{
-      "features": [
-        {
-          "type": "Feature",
-          "properties": {
-            "name": "Pioneers Memorial Park",
-            "id": "LP00001"
-          },
-          "geometry": {
-            "coordinates": [
-              [
-                [
-                  151.156402,
-                  -33.877553
-                ],
-                [
-                  151.156631,
-                  -33.879682
-                ],
-                [
-                  151.157123,
-                  -33.879658
-                ],
-                [
-                  151.157141,
-                  -33.879805
-                ],
-                [
-                  151.157501,
-                  -33.879767
-                ],
-                [
-                  151.157535,
-                  -33.87991
-                ],
-                [
-                  151.157661,
-                  -33.8799
-                ],
-                [
-                  151.15765,
-                  -33.879744
-                ],
-                [
-                  151.158211,
-                  -33.879701
-                ],
-                [
-                  151.158239,
-                  -33.879853
-                ],
-                [
-                  151.158531,
-                  -33.879834
-                ],
-                [
-                  151.158257,
-                  -33.87742
-                ],
-                [
-                  151.158165,
-                  -33.877368
-                ],
-                [
-                  151.156454,
-                  -33.877463
-                ],
-                [
-                  151.156402,
-                  -33.877553
-                ]
-              ]
-            ],
-            "type": "Polygon"
-          },
-          "id": "2a291db8f631557f3bea7b17cf2ec031"
-        },
-        {
-          "type": "Feature",
-          "properties": {
-            "id": "LP00002",
-            "name": "War Memorial Park"
-          },
-          "geometry": {
-            "coordinates": [
-              [
-                [
-                  151.16336,
-                  -33.877686
-                ],
-                [
-                  151.162926,
-                  -33.878937
-                ],
-                [
-                  151.164068,
-                  -33.879176
-                ],
-                [
-                  151.164502,
-                  -33.877976
-                ],
-                [
-                  151.16336,
-                  -33.877686
-                ]
-              ]
-            ],
-            "type": "Polygon"
-          },
-          "id": "73551427014be48e77d10f4dd2d7bd24"
-        }
-      ],
-      "type": "FeatureCollection"
-    }`;
-            yield QueryController.testThis();
-            let key = mem_service_1.default.createEntry(testText);
             res.status(200).send(key);
         });
     }
@@ -190,4 +66,4 @@ exports.default = new class QueryController {
         });
     }
 };
-//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoicXVlcnlDb250cm9sbGVyLmpzIiwic291cmNlUm9vdCI6IiIsInNvdXJjZXMiOlsiLi4vLi4vY29udHJvbGxlcnMvcXVlcnlDb250cm9sbGVyLnRzIl0sIm5hbWVzIjpbXSwibWFwcGluZ3MiOiI7Ozs7Ozs7Ozs7Ozs7O0FBQ0EsdUdBQXNFO0FBQ3RFLGlGQUEwRDtBQUMxRCxrREFBMEI7QUFFMUIsTUFBTSxHQUFHLEdBQW9CLElBQUEsZUFBSyxFQUFDLHNCQUFzQixDQUFDLENBQUM7QUFFM0Qsa0JBQWUsSUFBSSxNQUFNLGVBQWU7SUFDdEM7SUFJQSxDQUFDO0lBRUQsTUFBTSxDQUFPLFFBQVE7O1lBQ25CLE9BQU8sQ0FBQyxHQUFHLENBQUMsWUFBWSxDQUFDLENBQUE7UUFDM0IsQ0FBQztLQUFBO0lBRUQsTUFBTSxDQUFPLGNBQWMsQ0FBQyxTQUF3Qjs7WUFDbEQsTUFBTSxPQUFPLEdBQUc7OztTQUdYLENBQUM7WUFDTixNQUFNLEdBQUcsR0FBRyxNQUFNLENBQUM7WUFDbkIsSUFBSSxNQUFNLEdBQVcsT0FBTyxDQUFDO1lBQzdCLFNBQVMsQ0FBQyxPQUFPLENBQUMsQ0FBQyxPQUFZLEVBQUUsRUFBRTtnQkFDakMsTUFBTSxJQUFJLE9BQU8sQ0FBQyxRQUFRLENBQUE7Z0JBQzFCLE1BQU0sSUFBSSxLQUFLLENBQUE7WUFDakIsQ0FBQyxDQUFDLENBQUE7WUFDRixNQUFNLElBQUksR0FBRyxDQUFBO1lBQ2IsT0FBTyxDQUFDLEdBQUcsQ0FBQyxNQUFNLENBQUMsQ0FBQTtZQUNuQixPQUFPLE1BQU0sQ0FBQztRQUNoQixDQUFDO0tBQUE7SUFFSyxZQUFZLENBQUMsR0FBWSxFQUFFLEdBQWE7O1lBQzVDLE1BQU0sTUFBTSxHQUFrQixNQUFNLGdDQUFhLENBQUMsT0FBTyxFQUFFLENBQUEsQ0FBQyxtSEFBbUg7WUFDL0ssT0FBTyxDQUFDLEdBQUcsQ0FBQyxNQUFNLENBQUMsQ0FBQTtZQUNuQixHQUFHLENBQUMsTUFBTSxDQUFDLEdBQUcsQ0FBQyxDQUFDLElBQUksQ0FBQyxNQUFNLENBQUMsQ0FBQTtRQUM5QixDQUFDO0tBQUE7SUFFSyxhQUFhLENBQUMsR0FBWSxFQUFFLEdBQWE7O1lBQzdDLE1BQU0sTUFBTSxHQUFrQixNQUFNLGdDQUFhLENBQUMsT0FBTyxFQUFFLENBQUEsQ0FBQyxtSEFBbUg7WUFDL0ssT0FBTyxDQUFDLEdBQUcsQ0FBQyxNQUFNLENBQUMsQ0FBQTtZQUNuQixNQUFNLElBQUksR0FBRyxNQUFNLGVBQWUsQ0FBQyxjQUFjLENBQUMsTUFBTSxDQUFDLENBQUE7WUFDekQsSUFBSSxHQUFHLEdBQUcscUJBQWEsQ0FBQyxXQUFXLENBQUMsSUFBSSxDQUFDLENBQUE7WUFDekMsR0FBRyxDQUFDLE1BQU0sQ0FBQyxHQUFHLENBQUMsQ0FBQyxJQUFJLENBQUMsR0FBRyxDQUFDLENBQUE7UUFDM0IsQ0FBQztLQUFBO0lBRUssUUFBUSxDQUFDLEdBQVksRUFBRSxHQUFhOztZQUN4QyxNQUFNLFFBQVEsR0FBRzs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7O01Ba0hmLENBQUE7WUFDRixNQUFNLGVBQWUsQ0FBQyxRQUFRLEVBQUUsQ0FBQztZQUNqQyxJQUFJLEdBQUcsR0FBRyxxQkFBYSxDQUFDLFdBQVcsQ0FBQyxRQUFRLENBQUMsQ0FBQTtZQUM3QyxHQUFHLENBQUMsTUFBTSxDQUFDLEdBQUcsQ0FBQyxDQUFDLElBQUksQ0FBQyxHQUFHLENBQUMsQ0FBQTtRQUMzQixDQUFDO0tBQUE7SUFFSyxPQUFPLENBQUMsR0FBWSxFQUFFLEdBQWE7O1lBQ3ZDLE1BQU0sR0FBRyxHQUFHLEdBQUcsQ0FBQyxNQUFNLENBQUMsRUFBRSxDQUFBO1lBQ3pCLE1BQU0sSUFBSSxHQUFHLHFCQUFhLENBQUMsUUFBUSxDQUFDLEdBQUcsQ0FBQyxDQUFBO1lBQ3hDLE1BQU0sUUFBUSxHQUFHLElBQUksYUFBSixJQUFJLHVCQUFKLElBQUksQ0FBRSxNQUFNLENBQUMsQ0FBQyxDQUFDLENBQUEsQ0FBQyxtRUFBbUU7WUFDcEcscUJBQWEsQ0FBQyxXQUFXLENBQUMsR0FBRyxDQUFDLENBQUE7WUFDOUIsR0FBRyxDQUFDLElBQUksQ0FBQyxXQUFXLENBQUMsQ0FBQTtZQUNyQixHQUFHLENBQUMsTUFBTSxDQUFDLEdBQUcsQ0FBQyxDQUFDLElBQUksQ0FBQyxRQUFRLENBQUMsQ0FBQTtRQUNoQyxDQUFDO0tBQUE7Q0FDRixDQUFBIn0=
+//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoicXVlcnlDb250cm9sbGVyLmpzIiwic291cmNlUm9vdCI6IiIsInNvdXJjZXMiOlsiLi4vLi4vY29udHJvbGxlcnMvcXVlcnlDb250cm9sbGVyLnRzIl0sIm5hbWVzIjpbXSwibWFwcGluZ3MiOiI7Ozs7Ozs7Ozs7Ozs7O0FBQ0EsdUdBQXNFO0FBQ3RFLGlGQUEwRDtBQUMxRCxrREFBMEI7QUFFMUIsTUFBTSxHQUFHLEdBQW9CLElBQUEsZUFBSyxFQUFDLHNCQUFzQixDQUFDLENBQUM7QUFFM0Qsa0JBQWUsSUFBSSxNQUFNLGVBQWU7SUFDdEM7SUFFQSxDQUFDO0lBRUQsTUFBTSxDQUFPLGNBQWMsQ0FBQyxTQUFxQjs7WUFDL0MsTUFBTSxNQUFNLEdBQUcsU0FBUyxDQUFDLE1BQU0sQ0FBQztZQUNoQyxNQUFNLE9BQU8sR0FBRzs7O1NBR1gsQ0FBQztZQUNOLE1BQU0sR0FBRyxHQUFHLE1BQU0sQ0FBQztZQUNuQixJQUFJLE1BQU0sR0FBVyxPQUFPLENBQUM7WUFFN0IsS0FBSyxJQUFJLENBQUMsR0FBRyxDQUFDLEVBQUUsQ0FBQyxHQUFHLE1BQU0sRUFBRSxDQUFDLEVBQUUsRUFBQztnQkFDOUIsTUFBTSxJQUFJLFNBQVMsQ0FBQyxDQUFDLENBQUMsQ0FBQyxRQUFRLENBQUE7Z0JBQy9CLElBQUksQ0FBQyxJQUFJLE1BQU0sR0FBRyxDQUFDLEVBQUM7b0JBQ2xCLE1BQU0sSUFBSSxJQUFJLENBQUM7aUJBQ2hCO3FCQUNHO29CQUNGLE1BQU0sSUFBSSxLQUFLLENBQUM7aUJBQ2pCO2FBQ0Y7WUFFRCxNQUFNLElBQUksR0FBRyxDQUFBO1lBRWIsT0FBTyxNQUFNLENBQUM7UUFDaEIsQ0FBQztLQUFBO0lBRUssWUFBWSxDQUFDLEdBQVksRUFBRSxHQUFhOztZQUM1QyxNQUFNLE1BQU0sR0FBa0IsTUFBTSxnQ0FBYSxDQUFDLE9BQU8sRUFBRSxDQUFBLENBQUMsbUhBQW1IO1lBQy9LLEdBQUcsQ0FBQyxNQUFNLENBQUMsR0FBRyxDQUFDLENBQUMsSUFBSSxDQUFDLE1BQU0sQ0FBQyxDQUFBO1FBQzlCLENBQUM7S0FBQTtJQUVLLGFBQWEsQ0FBQyxHQUFZLEVBQUUsR0FBYTs7WUFDN0MsTUFBTSxNQUFNLEdBQWtCLE1BQU0sZ0NBQWEsQ0FBQyxPQUFPLEVBQUUsQ0FBQSxDQUFDLG1IQUFtSDtZQUMvSyxNQUFNLElBQUksR0FBRyxNQUFNLGVBQWUsQ0FBQyxjQUFjLENBQUMsTUFBTSxDQUFDLENBQUE7WUFDekQsSUFBSSxHQUFHLEdBQUcscUJBQWEsQ0FBQyxXQUFXLENBQUMsSUFBSSxDQUFDLENBQUE7WUFDekMsR0FBRyxDQUFDLE1BQU0sQ0FBQyxHQUFHLENBQUMsQ0FBQyxJQUFJLENBQUMsR0FBRyxDQUFDLENBQUE7UUFDM0IsQ0FBQztLQUFBO0lBRUssT0FBTyxDQUFDLEdBQVksRUFBRSxHQUFhOztZQUN2QyxNQUFNLEdBQUcsR0FBRyxHQUFHLENBQUMsTUFBTSxDQUFDLEVBQUUsQ0FBQTtZQUN6QixNQUFNLElBQUksR0FBRyxxQkFBYSxDQUFDLFFBQVEsQ0FBQyxHQUFHLENBQUMsQ0FBQTtZQUN4QyxNQUFNLFFBQVEsR0FBRyxJQUFJLGFBQUosSUFBSSx1QkFBSixJQUFJLENBQUUsTUFBTSxDQUFDLENBQUMsQ0FBQyxDQUFBLENBQUMsbUVBQW1FO1lBQ3BHLHFCQUFhLENBQUMsV0FBVyxDQUFDLEdBQUcsQ0FBQyxDQUFBO1lBQzlCLEdBQUcsQ0FBQyxJQUFJLENBQUMsV0FBVyxDQUFDLENBQUE7WUFDckIsR0FBRyxDQUFDLE1BQU0sQ0FBQyxHQUFHLENBQUMsQ0FBQyxJQUFJLENBQUMsUUFBUSxDQUFDLENBQUE7UUFDaEMsQ0FBQztLQUFBO0NBQ0YsQ0FBQSJ9

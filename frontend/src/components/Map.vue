@@ -30,7 +30,6 @@ export default {
 
     const getTestFile = await this.getFile()
     console.log(getTestFile)
-    //await console.log(axios.get(`http://localhost:4000/testfile/${getTestFile}`))
 
     let map = new mapboxgl.Map({
       container: "mapContainer",
@@ -42,11 +41,6 @@ export default {
     map.on('load', async function () {
       //const testArray = ["https://raw.githubusercontent.com/CalvinDong/WaterMap/api_test/frontend/src/Files/test.geojson","https://raw.githubusercontent.com/CalvinDong/WaterMap/api_test/frontend/src/Files/testStuff.geojson"]
 
-      /*async function getFile(){
-        const res = await axios.post(`${this.backend}/testFile`)
-        return res.data
-      }*/
-
       map.addSource('mapbox-dem', {
       'type': 'raster-dem',
       'url': 'mapbox://mapbox.mapbox-terrain-dem-v1',
@@ -57,7 +51,7 @@ export default {
       map.addSource('testing', {
         type: 'geojson',
         // Use a URL for the value for the `data` property.
-        data: `http://localhost:4000/testfile/${getTestFile}`
+        data: `http://localhost:4000/filter/${getTestFile}`
       });
 
       map.addLayer({
