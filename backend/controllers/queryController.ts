@@ -6,29 +6,44 @@ import debug from 'debug';
 const log: debug.IDebugger = debug('app:users-controller');
 
 export default new class QueryController {
+  constructor(){
+    type locationType = {
+      location: String
+    }
+  }
+
   static async testThis(){
     console.log("it do this")
   }
 
+  static async aggregateFiles(locations: Array<Object>){
+    const starter = `{
+      "type": "FeatureCollection",
+      "features": [
+        `;
+    const end = `]\n}`;
+    let toSend: String = starter;
+    locations.forEach((located: any) => { // Should make custom data types for our incoming data istead of using any
+      toSend += located.location
+      toSend += ',\n'
+    })
+    toSend += end
+    console.log(toSend)
+    return toSend;
+  }
+
   async listAllParks(req: Request, res: Response){
-    const result = await SqliteService.ReadAll() // Could define Sqlite service using an interface (e.g. CRUD interface), will have to remove "new" from export line
+    const result: Array<Object> = await SqliteService.ReadAll() // Could define Sqlite service using an interface (e.g. CRUD interface), will have to remove "new" from export line
     console.log(result)
     res.status(200).send(result)
   }
 
-  static async aggregateFiles(locations: Array<Object>){
-    const starter = "";
-    const end = ""
-    let toSend = ""
-    locations.forEach((location) => {
-
-    })
-
-    return toSend;
-  }
-
   async processFilter(req: Request, res: Response){
-
+    const result: Array<Object> = await SqliteService.ReadAll() // Could define Sqlite service using an interface (e.g. CRUD interface), will have to remove "new" from export line
+    console.log(result)
+    const file = await QueryController.aggregateFiles(result)
+    let key = MemoryService.createEntry(file)
+    res.status(200).send(key)
   }
 
   async testFile(req: Request, res: Response){
