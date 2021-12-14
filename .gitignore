@@ -1,4 +1,4 @@
 frontend/.env
 backend/node_modules
-/vs
+/.vs
 backend/parkfinder-cd1be-firebase-adminsdk-k79gh-a7f6388c6b.json
