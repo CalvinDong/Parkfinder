@@ -28,4 +28,8 @@ export default new class SqliteService{
     return result
   }
 
+  public async ReadFilter(){
+    
+  }
+
 }

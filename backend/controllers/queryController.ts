@@ -5,12 +5,16 @@ import debug from 'debug';
 
 const log: debug.IDebugger = debug('app:users-controller');
 
+interface geojson{
+  location: string,
+}
+
 export default new class QueryController {
   constructor(){
     
   }
 
-  static async aggregateFiles(locations: Array<any>){ //Should make custom data types for our incoming data istead of using any
+  static async aggregateFiles(locations: Array<any>){ //Should make custom data types for our incoming data instead of using any
     const length = locations.length;
     const starter = `{
       "type": "FeatureCollection",
