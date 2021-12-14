@@ -1,1 +1,7 @@
-GET http://localhost:4000/queries
+//POST http://localhost:4000/testFile
+
+//GET http://localhost:4000/queries
+
+//POST http://localhost:4000/filter
+
+GET http://localhost:4000/filter/b7a8bd28-711f-4b1f-946c-3f12b16121db

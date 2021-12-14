@@ -10,6 +10,10 @@ export class QueryRoutes extends CommonRoutesConfig {
     configureRoutes() {
       this.app.route(`/queries`)
       .get(QueryController.listAllParks)
+      this.app.route(`/filter`)
+      .post(QueryController.processFilter)
+      this.app.route(`/filter/:id`)
+      .get(QueryController.getFile)
       
     return this.app;
   }
