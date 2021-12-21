@@ -4,11 +4,9 @@
 
 <script>
     import MainPage from "./Views/MainPage"
-    import dotenv from 'dotenv';
-    dotenv.config();
 
     export default {
-        name: 'App',
+        name: 'Parkfinder',
         components: {
             MainPage
         }

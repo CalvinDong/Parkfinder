@@ -13,6 +13,14 @@ export default {
   components: {
     Map,
     Radio
+  },
+
+  methods: {
+
+  },
+
+  props: {
+    
   }
 }
 </script>
