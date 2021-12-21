@@ -1,11 +1,13 @@
 import Database from "better-sqlite3"
 import {Database as SqliteDatabase} from "better-sqlite3"
 
+import config from './config'
+
 export default new class SqliteService{
   private db: SqliteDatabase
   
   constructor(){
-    this.db = new Database('parkfinder.db', { verbose: console.log, readonly: true }); // Should make function that handles when db can't be found
+    this.db = new Database(config.DB_NAME, { verbose: console.log, readonly: true }); // Should make function that handles when db can't be found
   }
 
   public async ReadAll(){

@@ -16,6 +16,7 @@
     "better-sqlite3": "^7.4.5",
     "cors": "^2.8.5",
     "debug": "^4.3.3",
+    "dotenv": "^10.0.0",
     "express": "^4.17.1",
     "express-winston": "^4.2.0",
     "firebase-admin": "^10.0.0",
