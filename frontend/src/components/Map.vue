@@ -14,7 +14,7 @@ export default {
     return {
       accessToken: `${process.env.VUE_APP_TOKEN}`,
       backend: "http://localhost:4000",
-      geoJSON: ""
+      geoJSON: "",
     };
   },
 
@@ -25,11 +25,24 @@ export default {
     }
   },
 
-  async mounted(){
-    mapboxgl.accessToken = this.accessToken;
+  beforeCreated(){
+   
+  },
 
+  created(){
+    mapboxgl.accessToken = this.accessToken;
+  },
+
+  beforeMount(){
+    
+  },
+
+  async mounted(){
+    //mapboxgl.accessToken = this.accessToken;
+    //this.map.setContainer("mapContainer")
     const getTestFile = await this.getFile()
     console.log(getTestFile)
+    console.log(this.backend)
 
     let map = new mapboxgl.Map({
       container: "mapContainer",
@@ -40,6 +53,7 @@ export default {
 
     map.on('load', async function () {
       //const testArray = ["https://raw.githubusercontent.com/CalvinDong/WaterMap/api_test/frontend/src/Files/test.geojson","https://raw.githubusercontent.com/CalvinDong/WaterMap/api_test/frontend/src/Files/testStuff.geojson"]
+      //console.log(backend)
 
       map.addSource('mapbox-dem', {
       'type': 'raster-dem',
