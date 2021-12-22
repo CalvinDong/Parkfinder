@@ -1,20 +1,29 @@
 <template>
-  <div id="mapContainer" class="basemap"></div>
+  <div>
+    <div id="mapContainer" class="basemap"/>
+    <div>
+      <Radio @style-chosen="changeStyle"/>
+    </div>
+  </div>
 </template>
 
 <script>
 import mapboxgl from "mapbox-gl";
 import axios from "axios"
 
+import Radio from "../components/Radio"
+
 export default {
   name: "Map",
   components:{
+    Radio
   },
   data() {
     return {
       accessToken: `${process.env.VUE_APP_TOKEN}`,
       backend: "http://localhost:4000",
       geoJSON: "",
+      map: null
     };
   },
 
@@ -22,11 +31,16 @@ export default {
     async getFile(){
       const res = await axios.post(`${this.backend}/filter`)
       return res.data
-    }
+    },
+
+    async changeStyle(mapValue){
+      await this.map.setStyle('mapbox://styles/mapbox/' + mapValue)
+    },
+
   },
 
-  beforeCreated(){
-   
+  beforeCreate(){
+
   },
 
   created(){
@@ -38,37 +52,57 @@ export default {
   },
 
   async mounted(){
-    //mapboxgl.accessToken = this.accessToken;
-    //this.map.setContainer("mapContainer")
+
+    /*async function dem(){
+      this.map.addSource('mapbox-dem', {
+        'type': 'raster-dem',
+        'url': 'mapbox://mapbox.mapbox-terrain-dem-v1',
+        'tileSize': 512,
+        'maxzoom': 14
+      });
+      this.map.setTerrain({ 'source': 'mapbox-dem', 'exaggeration': 1.2 });
+    }*/
+
     const getTestFile = await this.getFile()
     console.log(getTestFile)
     console.log(this.backend)
-
-    let map = new mapboxgl.Map({
+    this.map = await new mapboxgl.Map({
       container: "mapContainer",
       style: "mapbox://styles/mapbox/outdoors-v11",
       center: [151.2,-33.9],
       zoom: 10,
     })
+    console.log(this.map)
 
-    map.on('load', async function () {
-      //const testArray = ["https://raw.githubusercontent.com/CalvinDong/WaterMap/api_test/frontend/src/Files/test.geojson","https://raw.githubusercontent.com/CalvinDong/WaterMap/api_test/frontend/src/Files/testStuff.geojson"]
-      //console.log(backend)
+    /*await this.map.addSource('mapbox-dem', {
+        'type': 'raster-dem',
+        'url': 'mapbox://mapbox.mapbox-terrain-dem-v1',
+        'tileSize': 512,
+        'maxzoom': 14
+    });
 
-      map.addSource('mapbox-dem', {
-      'type': 'raster-dem',
-      'url': 'mapbox://mapbox.mapbox-terrain-dem-v1',
-      'tileSize': 512,
-      'maxzoom': 14
+    this.map.setTerrain({ 'source': 'mapbox-dem', 'exaggeration': 1.2 });*/
+
+    this.map.on('load', () => {
+      console.log("it's doing something 0")
+      this.map.addSource('mapbox-dem', {
+        'type': 'raster-dem',
+        'url': 'mapbox://mapbox.mapbox-terrain-dem-v1',
+        'tileSize': 512,
+        'maxzoom': 14
       });
+      console.log("it's doing something")
 
-      map.addSource('testing', {
+      // add the DEM source as a terrain layer with exaggerated height
+      this.map.setTerrain({ 'source': 'mapbox-dem', 'exaggeration': 1.2 });
+
+      this.map.addSource('testing', {
         type: 'geojson',
         // Use a URL for the value for the `data` property.
         data: `http://localhost:4000/filter/${getTestFile}`
       });
 
-      map.addLayer({
+      this.map.addLayer({
           'id':  `test-layer`,
           'type': 'fill',
           'source': 'testing',
@@ -78,13 +112,13 @@ export default {
           },
       });
 
-      map.addSource('earthquakes', {
+      this.map.addSource('earthquakes', {
         type: 'geojson',
         // Use a URL for the value for the `data` property.
         data: 'https://docs.mapbox.com/mapbox-gl-js/assets/earthquakes.geojson'
       });
 
-      map.addLayer({
+      this.map.addLayer({
         'id': 'earthquakes-layer',
         'type': 'circle',
         'source': 'earthquakes',
@@ -96,10 +130,7 @@ export default {
         }
       });
 
-      // add the DEM source as a terrain layer with exaggerated height
-      map.setTerrain({ 'source': 'mapbox-dem', 'exaggeration': 1.2 });
-
-      map.addLayer({
+      this.map.addLayer({
         'id': 'sky',
         'type': 'sky',
         'paint': {
@@ -110,9 +141,13 @@ export default {
       });
 
       
-
     })
+  },
+
+  async beforeUpdate(){
+    
   }
+
 }
 </script>
 
