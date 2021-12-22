@@ -22,8 +22,6 @@ export default {
     return {
       accessToken: `${process.env.VUE_APP_TOKEN}`,
       backend: "http://localhost:4000",
-      geoJSON: "",
-      map: null
     };
   },
 
@@ -45,6 +43,7 @@ export default {
 
   created(){
     mapboxgl.accessToken = this.accessToken;
+    this.map = null
   },
 
   beforeMount(){
@@ -52,39 +51,18 @@ export default {
   },
 
   async mounted(){
-
-    /*async function dem(){
-      this.map.addSource('mapbox-dem', {
-        'type': 'raster-dem',
-        'url': 'mapbox://mapbox.mapbox-terrain-dem-v1',
-        'tileSize': 512,
-        'maxzoom': 14
-      });
-      this.map.setTerrain({ 'source': 'mapbox-dem', 'exaggeration': 1.2 });
-    }*/
-
     const getTestFile = await this.getFile()
     console.log(getTestFile)
     console.log(this.backend)
+
     this.map = await new mapboxgl.Map({
       container: "mapContainer",
       style: "mapbox://styles/mapbox/outdoors-v11",
       center: [151.2,-33.9],
       zoom: 10,
     })
-    console.log(this.map)
-
-    /*await this.map.addSource('mapbox-dem', {
-        'type': 'raster-dem',
-        'url': 'mapbox://mapbox.mapbox-terrain-dem-v1',
-        'tileSize': 512,
-        'maxzoom': 14
-    });
-
-    this.map.setTerrain({ 'source': 'mapbox-dem', 'exaggeration': 1.2 });*/
 
     this.map.on('load', () => {
-      console.log("it's doing something 0")
       this.map.addSource('mapbox-dem', {
         'type': 'raster-dem',
         'url': 'mapbox://mapbox.mapbox-terrain-dem-v1',
