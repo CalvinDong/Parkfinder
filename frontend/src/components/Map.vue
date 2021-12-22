@@ -20,7 +20,6 @@ export default {
   },
   data() {
     return {
-      accessToken: `${process.env.VUE_APP_TOKEN}`,
       backend: "http://localhost:4000",
     };
   },
@@ -37,17 +36,9 @@ export default {
 
   },
 
-  beforeCreate(){
-
-  },
-
   created(){
-    mapboxgl.accessToken = this.accessToken;
+    mapboxgl.accessToken = `${process.env.VUE_APP_TOKEN}`;
     this.map = null
-  },
-
-  beforeMount(){
-    
   },
 
   async mounted(){
@@ -69,7 +60,6 @@ export default {
         'tileSize': 512,
         'maxzoom': 14
       });
-      console.log("it's doing something")
 
       // add the DEM source as a terrain layer with exaggerated height
       this.map.setTerrain({ 'source': 'mapbox-dem', 'exaggeration': 1.2 });
@@ -121,11 +111,6 @@ export default {
       
     })
   },
-
-  async beforeUpdate(){
-    
-  }
-
 }
 </script>
 
