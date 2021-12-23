@@ -61,6 +61,7 @@ export default {
     background: #efefef;
     font-family: 'Open Sans', sans-serif;
     padding: 10px;
+    border-radius: 5px;
   }
   label{
     padding: 5px;
