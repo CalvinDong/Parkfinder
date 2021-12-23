@@ -31,56 +31,12 @@ export default {
       return res.data
     },
 
-    async addSourcesAndLayers(){
-      this.getTestFile = await this.getFile()
-      /////////////////////////////////////////////////////////////////////////////////\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
-      this.map.addSource('mapbox-dem', {
-        'type': 'raster-dem',
-        'url': 'mapbox://mapbox.mapbox-terrain-dem-v1',
-        'tileSize': 512,
-        'maxzoom': 14
-      });
-
-      // add the DEM source as a terrain layer with exaggerated height
+    async updateLayers(){
       this.map.setTerrain({ 'source': 'mapbox-dem', 'exaggeration': 1.2 });
 
-      /////////////////////////////////////////////////////////////////////////////////\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
-      this.map.addSource('earthquakes', {
-        type: 'geojson',
-        data: 'https://docs.mapbox.com/mapbox-gl-js/assets/earthquakes.geojson'
-      });
-
-      this.map.addLayer({
-        'id': 'earthquakes-layer',
-        'type': 'circle',
-        'source': 'earthquakes',
-        'paint': {
-        'circle-radius': 8,
-        'circle-stroke-width': 2,
-        'circle-color': 'red',
-        'circle-stroke-color': 'white'
-        }
-      });
-
-      /////////////////////////////////////////////////////////////////////////////////\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
-
-      this.map.addLayer({
-        'id': 'sky',
-        'type': 'sky',
-        'paint': {
-          'sky-type': 'atmosphere',
-          'sky-atmosphere-sun': [1.0, 1.0],
-          'sky-atmosphere-sun-intensity': 15
-        }
-      });
-
-      /////////////////////////////////////////////////////////////////////////////////\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
-
-      this.map.addSource('testing', {
-        type: 'geojson',
-        // Use a URL for the value for the `data` property.
-        data: `http://localhost:4000/filter/${this.getTestFile}`
-      });
+      if (this.map.getLayer('test-layer')) { // Still works if I don't remove it, but it gives me angry red warnings in the console if I don't
+        this.map.removeLayer('test-layer');
+      }
 
       this.map.addLayer({
         'id':  `test-layer`,
@@ -93,15 +49,19 @@ export default {
       });
     },
 
+    async updateSource(){
+      this.getTestFile = await this.getFile()
+      const geoJSONSrc = this.map.getSource('testing')
+      geoJSONSrc.setData(`http://localhost:4000/filter/${this.getTestFile}`)
+    },
+
     async changeStyle(mapValue){
       await this.map.setStyle('mapbox://styles/mapbox/' + mapValue)
       this.map.on('style.load', ()=> {
-        console.log("dude");
-        this.addSourcesAndLayers();
+        this.updateSource();
+        this.updateLayers();
       })
-      //console.log(this.map.getStyle().sources)
     },
-
   },
 
   created(){
@@ -110,7 +70,9 @@ export default {
   },
 
   async mounted(){
-    this.map = await new mapboxgl.Map({
+    this.getTestFile = await this.getFile()
+
+    this.map = new mapboxgl.Map({
       container: "mapContainer",
       style: "mapbox://styles/mapbox/outdoors-v11",
       center: [151.2,-33.9],
@@ -118,9 +80,32 @@ export default {
     })
 
     this.map.on('style.load', () => {
-      this.addSourcesAndLayers();
+      this.map.addSource('mapbox-dem', {
+        'type': 'raster-dem',
+        'url': 'mapbox://mapbox.mapbox-terrain-dem-v1',
+        'tileSize': 512,
+        'maxzoom': 14
+      });
+
+      this.map.setTerrain({ 'source': 'mapbox-dem', 'exaggeration': 1.2 });
+
+      this.map.addSource('testing', {
+        type: 'geojson',
+        data: `http://localhost:4000/filter/${this.getTestFile}`
+      });
+
+      this.map.addLayer({
+        'id':  `test-layer`,
+        'type': 'fill',
+        'source': 'testing',
+        'paint': {
+          'fill-color': 'rgba(200, 100, 240, 0.4)',
+          'fill-outline-color': 'rgba(200, 100, 240, 1)'
+        },
+      });
     })
   },
+  
 }
 </script>
 
