@@ -1,9 +1,6 @@
 <template>
   <div>
     <div id="mapContainer" class="basemap"/>
-    <div>
-      <Radio @style-chosen="changeStyle"/>
-    </div>
   </div>
 </template>
 
@@ -11,18 +8,25 @@
 import mapboxgl from "mapbox-gl";
 import axios from "axios"
 
-import Radio from "../components/Radio"
-
 export default {
   name: "Map",
   components:{
-    Radio
+
   },
+
+  props:['mapStyle'],
+
   data() {
     return {
       backend: "http://localhost:4000",
       testFile: null
     };
+  },
+
+  watch:{
+    mapStyle(){
+      this.changeStyle();
+    }
   },
 
   methods: {
@@ -55,8 +59,8 @@ export default {
       geoJSONSrc.setData(`http://localhost:4000/filter/${this.getTestFile}`)
     },
 
-    async changeStyle(mapValue){
-      await this.map.setStyle('mapbox://styles/mapbox/' + mapValue)
+    async changeStyle(){
+      await this.map.setStyle('mapbox://styles/mapbox/' + this.mapStyle)
       this.map.on('style.load', ()=> {
         this.updateSource();
         this.updateLayers();
@@ -114,5 +118,6 @@ export default {
     position: absolute;
     height: 100vh;
     width: 100vw;
+    z-index: -1
   }
 </style>

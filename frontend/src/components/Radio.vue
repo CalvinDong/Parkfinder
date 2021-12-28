@@ -41,17 +41,6 @@ export default {
       this.$emit('style-chosen', mapValue)
     }
   },
-
-  mounted(){
-    /*const layerList = document.getElementById('menu');
-    const inputs = layerList.getElementsByTagName('input');
-    for (const input of inputs) {
-      input.onclick = (layer) => {
-        const layerId = layer.target.id;
-        map.setStyle('mapbox://styles/mapbox/' + layerId);
-      };
-    }*/
-  }
 }
 </script>
 
@@ -60,6 +49,7 @@ export default {
     position: absolute;
     background: #efefef;
     font-family: 'Open Sans', sans-serif;
+    height: auto;
     padding: 10px;
     border-radius: 5px;
   }
