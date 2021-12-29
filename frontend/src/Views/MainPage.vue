@@ -5,7 +5,10 @@
       <Radio @style-chosen="changeStyle"/>
     </div>
     <div class="child child-2">
-      <About/>
+      <About v-show="showAbout"/>
+    </div>
+    <div class="child child-3">
+      <button v-on:click="onClick()"> About </button>
     </div>
   </div>
 </template>
@@ -26,13 +29,18 @@ export default {
 
   data(){
     return{
-      mapStyle: ""
+      mapStyle: "",
+      showAbout: false
     }
   },
 
   methods: {
     changeStyle(mapValue){
       this.mapStyle = mapValue;
+    },
+
+    onClick(){
+      this.showAbout = true;
     }
   },
 
@@ -56,19 +64,29 @@ export default {
   }
 
   .child-1{
-    top: 100px;
-    right: 0px;
-    width: 50%;
+    top: 1vh;
+    left: 1vw;
+    width: 35%;
     height: auto;
     background: blue
   }
 
   .child-2{
-    top: 100px;
-    left: 100px;
-    min-width: 10%;
-    min-height: 100%;
-    float: left;
+    margin: 0 auto;
+    background: yellow;
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    vertical-align: middle;
+    transform: translate(-50%, 50%)
+  }
+
+  .child-3{
+    top: 1vh;
+    right: 20px;
+    width: auto;
+    height: auto;
+    background: blue
   }
 
 
