@@ -1,20 +1,27 @@
 <template>
-  <div id="mapContainer" class="basemap"></div>
+  <div>
+    <div id="mapContainer" class="basemap"/>
+    <div>
+      <Radio @style-chosen="changeStyle"/>
+    </div>
+  </div>
 </template>
 
 <script>
 import mapboxgl from "mapbox-gl";
 import axios from "axios"
 
+import Radio from "../components/Radio"
+
 export default {
   name: "Map",
   components:{
+    Radio
   },
   data() {
     return {
-      accessToken: `${process.env.VUE_APP_TOKEN}`,
       backend: "http://localhost:4000",
-      geoJSON: "",
+      testFile: null
     };
   },
 
@@ -22,97 +29,83 @@ export default {
     async getFile(){
       const res = await axios.post(`${this.backend}/filter`)
       return res.data
-    }
-  },
+    },
 
-  beforeCreated(){
-   
+    async updateLayers(){
+      this.map.setTerrain({ 'source': 'mapbox-dem', 'exaggeration': 1.2 });
+
+      if (this.map.getLayer('test-layer')) { // Still works if I don't remove it, but it gives me angry red warnings in the console if I don't
+        this.map.removeLayer('test-layer');
+      }
+
+      this.map.addLayer({
+        'id':  `test-layer`,
+        'type': 'fill',
+        'source': 'testing',
+        'paint': {
+          'fill-color': 'rgba(200, 100, 240, 0.4)',
+          'fill-outline-color': 'rgba(200, 100, 240, 1)'
+        },
+      });
+    },
+
+    async updateSource(){
+      this.getTestFile = await this.getFile()
+      const geoJSONSrc = this.map.getSource('testing')
+      geoJSONSrc.setData(`http://localhost:4000/filter/${this.getTestFile}`)
+    },
+
+    async changeStyle(mapValue){
+      await this.map.setStyle('mapbox://styles/mapbox/' + mapValue)
+      this.map.on('style.load', ()=> {
+        this.updateSource();
+        this.updateLayers();
+      })
+    },
   },
 
   created(){
-    mapboxgl.accessToken = this.accessToken;
-  },
-
-  beforeMount(){
-    
+    mapboxgl.accessToken = `${process.env.VUE_APP_TOKEN}`;
+    this.map = null
   },
 
   async mounted(){
-    //mapboxgl.accessToken = this.accessToken;
-    //this.map.setContainer("mapContainer")
-    const getTestFile = await this.getFile()
-    console.log(getTestFile)
-    console.log(this.backend)
+    this.getTestFile = await this.getFile()
 
-    let map = new mapboxgl.Map({
+    this.map = new mapboxgl.Map({
       container: "mapContainer",
       style: "mapbox://styles/mapbox/outdoors-v11",
       center: [151.2,-33.9],
       zoom: 10,
     })
 
-    map.on('load', async function () {
-      //const testArray = ["https://raw.githubusercontent.com/CalvinDong/WaterMap/api_test/frontend/src/Files/test.geojson","https://raw.githubusercontent.com/CalvinDong/WaterMap/api_test/frontend/src/Files/testStuff.geojson"]
-      //console.log(backend)
-
-      map.addSource('mapbox-dem', {
-      'type': 'raster-dem',
-      'url': 'mapbox://mapbox.mapbox-terrain-dem-v1',
-      'tileSize': 512,
-      'maxzoom': 14
+    this.map.on('style.load', () => {
+      this.map.addSource('mapbox-dem', {
+        'type': 'raster-dem',
+        'url': 'mapbox://mapbox.mapbox-terrain-dem-v1',
+        'tileSize': 512,
+        'maxzoom': 14
       });
 
-      map.addSource('testing', {
+      this.map.setTerrain({ 'source': 'mapbox-dem', 'exaggeration': 1.2 });
+
+      this.map.addSource('testing', {
         type: 'geojson',
-        // Use a URL for the value for the `data` property.
-        data: `http://localhost:4000/filter/${getTestFile}`
+        data: `http://localhost:4000/filter/${this.getTestFile}`
       });
 
-      map.addLayer({
-          'id':  `test-layer`,
-          'type': 'fill',
-          'source': 'testing',
-          'paint': {
-            'fill-color': 'rgba(200, 100, 240, 0.4)',
-            'fill-outline-color': 'rgba(200, 100, 240, 1)'
-          },
-      });
-
-      map.addSource('earthquakes', {
-        type: 'geojson',
-        // Use a URL for the value for the `data` property.
-        data: 'https://docs.mapbox.com/mapbox-gl-js/assets/earthquakes.geojson'
-      });
-
-      map.addLayer({
-        'id': 'earthquakes-layer',
-        'type': 'circle',
-        'source': 'earthquakes',
+      this.map.addLayer({
+        'id':  `test-layer`,
+        'type': 'fill',
+        'source': 'testing',
         'paint': {
-        'circle-radius': 8,
-        'circle-stroke-width': 2,
-        'circle-color': 'red',
-        'circle-stroke-color': 'white'
-        }
+          'fill-color': 'rgba(200, 100, 240, 0.4)',
+          'fill-outline-color': 'rgba(200, 100, 240, 1)'
+        },
       });
-
-      // add the DEM source as a terrain layer with exaggerated height
-      map.setTerrain({ 'source': 'mapbox-dem', 'exaggeration': 1.2 });
-
-      map.addLayer({
-        'id': 'sky',
-        'type': 'sky',
-        'paint': {
-          'sky-type': 'atmosphere',
-          'sky-atmosphere-sun': [1.0, 1.0],
-          'sky-atmosphere-sun-intensity': 15
-        }
-      });
-
-      
-
     })
-  }
+  },
+  
 }
 </script>
 
