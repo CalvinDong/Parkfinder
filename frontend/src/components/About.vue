@@ -1,6 +1,6 @@
 <template>
   <div class="card">
-    <img src="https://www.boredpanda.com/blog/wp-content/uploads/2017/12/funny-weird-wtf-stock-photos-19-5a3926af95d9d__700.jpg" alt="Photo" style="width:100%">
+    <img class="image" src="https://firebasestorage.googleapis.com/v0/b/parkfinder-cd1be.appspot.com/o/safe_image.jpg?alt=media&token=95f57db5-59a8-4db8-a98a-afa82f4ba8a0">
     <div class="bio">
       <h4>
         <b>It's a me Mario</b>
@@ -11,8 +11,16 @@
 </template>
 
 <script>
+import axios from "axios"
+
 export default {
-  name: 'About'
+  name: 'About',
+
+  async data() {
+    return {
+      image: await axios.get("http://localhost:4000/getAbout")
+    }
+  }
 }
 </script>
 
@@ -26,6 +34,11 @@ export default {
 
   .card:hover{
     box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2);
+  }
+
+  .image{
+    max-width: 24vw;
+    max-height: 24vw;
   }
 
   .bio{
