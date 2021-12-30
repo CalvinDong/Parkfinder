@@ -5,10 +5,12 @@
       <Radio @style-chosen="changeStyle"/>
     </div>
     <div class="child child-2">
-      <About v-show="showAbout"/>
+      <transition name="fade">
+        <About @exit-about="onClick" v-show="showAbout"/>
+      </transition>
     </div>
     <div class="child child-3">
-      <button v-on:click="onClick()"> About </button>
+      <Button v-on:click="onClick()"> About </Button>
     </div>
   </div>
 </template>
@@ -40,8 +42,8 @@ export default {
     },
 
     onClick(){
-      this.showAbout = true;
-    }
+      this.showAbout = !this.showAbout;
+    },
   },
 
   props: {
@@ -87,6 +89,13 @@ export default {
     width: auto;
     height: auto;
     background: blue
+  }
+
+  .fade-enter-from-active, .fade-leave-active {
+    transition: opacity .5s;
+  }
+  .fade-enter-from, .fade-leave-to /* .fade-leave-active below version 2.1.8 */ {
+    opacity: 0;
   }
 
 

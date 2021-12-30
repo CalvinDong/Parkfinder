@@ -1,6 +1,9 @@
 <template>
   <div class="card">
     <img class="image" src="https://firebasestorage.googleapis.com/v0/b/parkfinder-cd1be.appspot.com/o/safe_image.jpg?alt=media&token=95f57db5-59a8-4db8-a98a-afa82f4ba8a0">
+    <div class="close">
+      <i v-on:click="onClick()" class="material-icons">close</i>
+    </div>
     <div class="bio">
       <h4>
         <b>It's a me Mario</b>
@@ -20,6 +23,12 @@ export default {
     return {
       image: await axios.get("http://localhost:4000/getAbout")
     }
+  },
+
+  methods: {
+    onClick(){
+      this.$emit('exit-about')
+    }
   }
 }
 </script>
@@ -30,6 +39,7 @@ export default {
     transition: 0.3s;
     width: 25vw;
     height: 25vw;
+    position: relative
   }
 
   .card:hover{
@@ -43,6 +53,12 @@ export default {
 
   .bio{
     padding: 2px 16px;
+  }
+
+  .close{
+    position: absolute;
+    right: 1%;
+    top: 1%;
   }
 
 </style>
