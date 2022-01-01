@@ -2,7 +2,7 @@
   <div class="container">
     <Map :mapStyle="mapStyle"/>
     <div class="child child-1">
-      <Radio @style-chosen="changeStyle"/>
+      <RadioCopy @style-chosen="changeStyle"/>
     </div>
     <div class="child child-2">
       <transition name="fade">
@@ -19,14 +19,14 @@
 //import Radio from "../components/Radio"
 import Map from "../components/Map"
 import About from "../components/About"
-import Radio from "../components/Radio"
+import RadioCopy from "../components/RadioCopy"
 
 export default {
   name: 'MainPage',
   components: {
     Map,
     About,
-    Radio
+    RadioCopy
   },
 
   data(){
