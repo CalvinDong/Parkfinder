@@ -16,10 +16,9 @@
 </template>
 
 <script>
-//import Radio from "../components/Radio"
+import Radio from "../components/Radio"
 import Map from "../components/Map"
 import About from "../components/About"
-import Radio from "../components/Radio"
 
 export default {
   name: 'MainPage',
@@ -62,7 +61,6 @@ export default {
 
   .child{
     position: absolute;
-    background: red;
   }
 
   .child-1{
@@ -75,7 +73,6 @@ export default {
 
   .child-2{
     margin: 0 auto;
-    background: yellow;
     position: absolute;
     left: 50%;
     top: 50%;

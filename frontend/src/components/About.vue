@@ -39,6 +39,7 @@ export default {
     transition: 0.3s;
     width: 25vw;
     height: 25vw;
+    background-color: white;
     position: relative
   }
 

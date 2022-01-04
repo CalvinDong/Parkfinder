@@ -108,6 +108,19 @@ export default {
         },
       });
     })
+
+    this.map.on('click', 'test-layer', (e) => {
+      console.log(e.features[0].properties)
+      console.log(e.features[0])
+      //const coordinates = e.features[0].geometry.coordinates.slice();
+      const info = e.features[0].properties
+      new mapboxgl.Popup()
+        .setLngLat(e.lngLat)
+        .setHTML(info.name)
+        .addTo(this.map);
+      })
+
+    
   },
   
 }
