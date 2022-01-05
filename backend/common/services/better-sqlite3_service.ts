@@ -16,7 +16,7 @@ export default new class SqliteService{
       `SELECT * FROM ${testStatement}`
     );*/
     const readEverything = this.db.prepare(
-      `SELECT location FROM Parks`
+      `SELECT location FROM local`
     );
     const result = await readEverything.all()
     return result
@@ -32,6 +32,14 @@ export default new class SqliteService{
 
   public async ReadFilter(){
     
+  }
+
+  public async GetPark(table: any, id: any){
+    const prepare = this.db.prepare(
+      `SELECT * FROM ${table} WHERE baseId=${id}`
+    )
+    const result = await prepare.get()
+    return result
   }
 
 }

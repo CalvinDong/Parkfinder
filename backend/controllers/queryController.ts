@@ -43,6 +43,15 @@ export default new class QueryController {
     res.status(200).send(result)
   }
 
+  async getPark(req: Request, res: Response){
+    const table = req.params.table;
+    const id = req.params.id;
+
+    const result: Array<Object> = await SqliteService.GetPark(table, id);
+    res.status(200).send(result)
+
+  }
+
   async processFilter(req: Request, res: Response){
     const result: Array<Object> = await SqliteService.ReadAll() // Could define Sqlite service using an interface (e.g. CRUD interface), will have to remove "new" from export line
     const file = await QueryController.aggregateFiles(result)
