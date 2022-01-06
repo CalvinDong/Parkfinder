@@ -67,9 +67,10 @@ export default {
       })
     },
 
-    async getParkInfo(){
-      const info = await axios.post(`http://localhost:4000/queries/${info.type}/${info.id}`)
-      return info
+    async getParkInfo(geoInfo){
+      this.$emit('layer-clicked', geoInfo)
+      /*const info = await axios.post(`http://localhost:4000/queries/${info.type}/${info.id}`)
+      return info*/
     }
   },
 
@@ -119,11 +120,13 @@ export default {
       console.log(e.features[0])
       //const coordinates = e.features[0].geometry.coordinates.slice();
       const geoInfo = e.features[0].properties
-      const info = await axios.post(`http://localhost:4000/queries/${geoInfo.type}/${geoInfo.id}`)
+      this.getParkInfo(geoInfo)
+      this.$emit('layer-clicked', geoInfo)
+      /*const info = await axios.post(`http://localhost:4000/queries/${geoInfo.type}/${geoInfo.id}`)
       new mapboxgl.Popup()
         .setLngLat(e.lngLat)
         .setHTML(`<strong>${geoInfo.name}</strong><p>${info.data.description}</p>`)
-        .addTo(this.map);
+        .addTo(this.map);*/
       })
 
     

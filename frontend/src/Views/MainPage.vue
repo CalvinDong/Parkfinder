@@ -1,6 +1,6 @@
 <template>
+  <Map :mapStyle="mapStyle" @layer-clicked="parkChosen"/>
   <div class="container">
-    <Map :mapStyle="mapStyle"/>
     <div class="child child-1">
       <Radio @style-chosen="changeStyle"/>
     </div>
@@ -12,6 +12,9 @@
     <div class="child child-3">
       <Button v-on:click="onClick()"> About </Button>
     </div>
+    <div class="child child-4">
+      <ParkInfo :geoInfo="geoInfo" @park-info-close="handleParkClose" v-show="showParkInfo"/>
+    </div>
   </div>
 </template>
 
@@ -19,19 +22,23 @@
 import Radio from "../components/Radio"
 import Map from "../components/Map"
 import About from "../components/About"
+import ParkInfo from "../components/ParkInfo.vue"
 
 export default {
   name: 'MainPage',
   components: {
     Map,
     About,
-    Radio
+    Radio,
+    ParkInfo
   },
 
   data(){
     return{
       mapStyle: "",
-      showAbout: false
+      showAbout: false,
+      geoInfo: null,
+      showParkInfo: false
     }
   },
 
@@ -43,6 +50,16 @@ export default {
     onClick(){
       this.showAbout = !this.showAbout;
     },
+
+    parkChosen(geoInfo){
+      console.log("layer clicked")
+      this.showParkInfo = true;
+      this.geoInfo = geoInfo;
+    },
+
+    handleParkClose(){
+      this.showParkInfo = false;
+    }
   },
 
   props: {
@@ -54,6 +71,11 @@ export default {
 
 <style scoped>
   .container{
+    position: relative;
+    z-index: 3;
+    background: yellow;
+  }
+  .container-2{
     position: relative;
     z-index: 3;
     background: yellow;
@@ -86,6 +108,13 @@ export default {
     width: auto;
     height: auto;
     background: blue
+  }
+
+  .child-4{
+    top: 50vh;
+    left: 1vw;
+    transform: translate(0, -50%);
+    max-width: 200px;
   }
 
   .fade-enter-from-active, .fade-leave-active {
