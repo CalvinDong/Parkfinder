@@ -29,7 +29,7 @@ export default new class QueryController {
         toSend += '\n';
       }
       else{
-        toSend += ',\n';
+        toSend += ',\n'; // Add comma to end of location if it is not the last element
       }
     }
 

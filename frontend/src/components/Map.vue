@@ -113,7 +113,19 @@ export default {
           'fill-outline-color': 'rgba(200, 100, 240, 1)'
         },
       });
-    })
+
+      this.map.addLayer({
+        'id': 'park-volcanoes',
+        'type': 'fill',
+        'source': 'testing',
+        'paint': {
+          'fill-color': 'rgba(90, 230, 20, 0.4)',
+          'fill-outline-color': 'rgba(200, 100, 240, 1)'
+        },
+        'filter': ['==', 23, ["get", "id"]]
+        });
+
+      })
 
     this.map.on('click', 'test-layer', async (e) => {
       console.log(e.features[0].properties)

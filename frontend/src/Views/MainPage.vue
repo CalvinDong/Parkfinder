@@ -1,6 +1,6 @@
 <template>
-  <Map :mapStyle="mapStyle" @layer-clicked="parkChosen"/>
   <div class="container">
+    <Map :mapStyle="mapStyle" @layer-clicked="parkChosen"/>
     <div class="child child-1">
       <Radio @style-chosen="changeStyle"/>
     </div>
@@ -10,10 +10,13 @@
       </transition>
     </div>
     <div class="child child-3">
-      <Button v-on:click="onClick()"> About </Button>
+      <NButton type="primary" v-on:click="onClick()"> About </NButton>
     </div>
     <div class="child child-4">
       <ParkInfo :geoInfo="geoInfo" @park-info-close="handleParkClose" v-show="showParkInfo"/>
+    </div>
+    <div class="child child-5">
+      <Filter/>
     </div>
   </div>
 </template>
@@ -23,6 +26,9 @@ import Radio from "../components/Radio"
 import Map from "../components/Map"
 import About from "../components/About"
 import ParkInfo from "../components/ParkInfo.vue"
+import Filter from "../components/Filter.vue"
+
+import { NButton } from "naive-ui"
 
 export default {
   name: 'MainPage',
@@ -30,7 +36,9 @@ export default {
     Map,
     About,
     Radio,
-    ParkInfo
+    ParkInfo,
+    Filter,
+    NButton
   },
 
   data(){
@@ -51,7 +59,7 @@ export default {
       this.showAbout = !this.showAbout;
     },
 
-    parkChosen(geoInfo){
+    parkChosen(geoInfo){ // Make it so it doesn't send a request to backend if park already selected
       console.log("layer clicked")
       this.showParkInfo = true;
       this.geoInfo = geoInfo;
@@ -90,7 +98,6 @@ export default {
     left: 1vw;
     width: 35%;
     height: auto;
-    background: blue
   }
 
   .child-2{
@@ -107,12 +114,18 @@ export default {
     right: 20px;
     width: auto;
     height: auto;
-    background: blue
   }
 
   .child-4{
     top: 50vh;
     left: 1vw;
+    transform: translate(0, -50%);
+    max-width: 200px;
+  }
+
+  .child-5{
+    top: 50vh;
+    right: 1vw;
     transform: translate(0, -50%);
     max-width: 200px;
   }
