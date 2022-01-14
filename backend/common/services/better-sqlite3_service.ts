@@ -31,16 +31,14 @@ export default new class SqliteService{
   }
 
   public async ReadFilter(filter:Array<string>){
-    let result: any;
+    let result: any = [];
     filter.forEach(async (option) => {
-      console.log(option);
-      const readTable = this.db.prepare(
+      let readTable = this.db.prepare(
         `SELECT location FROM ${option}`
       );
-      const locations = await readTable.all();
-      result = [...result, ...locations];
+      let locations = await readTable.all();
+      result.push(locations);
     })
-
     return result;
   }
 
