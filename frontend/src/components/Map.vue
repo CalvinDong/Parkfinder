@@ -21,6 +21,7 @@ export default {
       backend: "http://localhost:4000",
       testFile: null,
       layersRegex: /park-layer$/,
+      layerIds: "-park-layer",
       colours: [
         {name: "park", fillColor: 'rgba(200, 100, 240, 0.4)', fillOutlineColor: 'rgba(200, 100, 240, 1)'}, 
         {name: "lakes", fillColor: 'rgba(0, 230, 0, 0.4)', fillOutlineColor: 'rgba(0, 0, 240, 1)'}
@@ -55,13 +56,13 @@ export default {
       this.map.setTerrain({ 'source': 'mapbox-dem', 'exaggeration': 1.2 });
 
       this.filters.forEach(filter => {
-        if (this.map.getLayer(filter)){
-          this.map.removeLayer(filter);
+        if (this.map.getLayer(`${filter}${this.layerIds}`)){
+          this.map.removeLayer(`${filter}${this.layerIds}`);
         }
 
         const layerColours = this.getPaint(filter)
         this.map.addLayer({
-          'id':  `${filter}-park-layer`,
+          'id':  `${filter}${this.layerIds}`,
           'type': 'fill',
           'source': 'testing',
           'paint': {
@@ -129,9 +130,11 @@ export default {
     this.map.on('click', async (e) => {
       const features = this.map.queryRenderedFeatures(e.point);
       const parkLayers = features.filter((layer) => this.layersRegex.test(layer.layer.id) == true); // Using regular expressions to find our geoJSON layers
-      const geoInfo = parkLayers[0].properties
-      this.getParkInfo(geoInfo)
-      this.$emit('layer-clicked', geoInfo) // Have to figure out if we want different behaviours on bbq, parks, lakes, etc layers clicked
+      if (parkLayers.length > 0){
+        const geoInfo = parkLayers[0].properties
+        this.getParkInfo(geoInfo)
+        this.$emit('layer-clicked', geoInfo) // Have to figure out if we want different behaviours on bbq, parks, lakes, etc layers clicked
+      }
     })
 
     
