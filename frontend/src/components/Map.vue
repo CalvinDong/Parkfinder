@@ -25,13 +25,18 @@ export default {
       colours: [
         {name: "park", fillColor: 'rgba(200, 100, 240, 0.4)', fillOutlineColor: 'rgba(200, 100, 240, 1)'}, 
         {name: "lakes", fillColor: 'rgba(0, 230, 0, 0.4)', fillOutlineColor: 'rgba(0, 0, 240, 1)'}
-      ]
+      ],
+      currentLayers: null,
     };
   },
 
   watch:{
     mapStyle(){
       this.changeStyle();
+    },
+    filters(){
+      this.updateSource();
+      this.updateLayers()
     }
   },
 
@@ -51,11 +56,35 @@ export default {
        return result
     },
 
+    async removeLayers(){
+      for (const layer in this.currentLayers){
+        if (this.map.getLayer(`${this.currentLayers[layer]}${this.layerIds}`)){
+          this.map.removeLayer(`${this.currentLayers[layer]}${this.layerIds}`);
+        }
+      }
+    },
 
     async updateLayers(){
       this.map.setTerrain({ 'source': 'mapbox-dem', 'exaggeration': 1.2 });
+      this.removeLayers();
 
-      this.filters.forEach(filter => {
+      for (const filter in this.filters) {
+        const layerColours = this.getPaint(this.filters[filter])
+        this.map.addLayer({
+          'id':  `${this.filters[filter]}${this.layerIds}`,
+          'type': 'fill',
+          'source': 'park-source',
+          'paint': {
+            'fill-color': layerColours.fillColor,
+            'fill-outline-color': layerColours.fillOutlineColor
+          },
+          'filter': ['==', this.filters[filter], ["get", "type"]]
+        });
+      }
+
+      this.currentLayers = this.filters;
+
+      /*this.filters.forEach(filter => {
         if (this.map.getLayer(`${filter}${this.layerIds}`)){
           this.map.removeLayer(`${filter}${this.layerIds}`);
         }
@@ -64,20 +93,20 @@ export default {
         this.map.addLayer({
           'id':  `${filter}${this.layerIds}`,
           'type': 'fill',
-          'source': 'testing',
+          'source': 'park-source',
           'paint': {
             'fill-color': layerColours.fillColor,
             'fill-outline-color': layerColours.fillOutlineColor
           },
           'filter': ['==', filter, ["get", "type"]]
         });
-      })
+      })*/
     },
 
 
     async updateSource(){
       this.getTestFile = await this.getFile()
-      const geoJSONSrc = this.map.getSource('testing')
+      const geoJSONSrc = this.map.getSource('park-source')
       geoJSONSrc.setData(`http://localhost:4000/filter/${this.getTestFile}`)
     },
 
@@ -97,7 +126,8 @@ export default {
 
   created(){
     mapboxgl.accessToken = `${process.env.VUE_APP_TOKEN}`;
-    this.map = null
+    this.map = null;
+    this.currentLayers = this.filters; 
   },
 
   async mounted(){
@@ -118,7 +148,7 @@ export default {
         'maxzoom': 14
       });
 
-      this.map.addSource('testing', {
+      this.map.addSource('park-source', {
         type: 'geojson',
         data: `http://localhost:4000/filter/${this.getTestFile}`
       });

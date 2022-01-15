@@ -14,16 +14,9 @@
 </template>
 
 <script>
-import axios from "axios"
 
 export default {
   name: 'About',
-
-  async data() {
-    return {
-      image: await axios.get("http://localhost:4000/getAbout")
-    }
-  },
 
   methods: {
     onClick(){

@@ -16,7 +16,7 @@
       <ParkInfo :geoInfo="geoInfo" @park-info-close="handleParkClose" v-show="showParkInfo"/>
     </div>
     <div class="child child-5">
-      <Filter/>
+      <Filter @filter-chosen="changeFilter"/>
     </div>
   </div>
 </template>
@@ -47,7 +47,7 @@ export default {
       showAbout: false,
       geoInfo: null,
       showParkInfo: false,
-      filters: ["park", "lakes"]
+      filters: null
     }
   },
 
@@ -67,6 +67,11 @@ export default {
 
     handleParkClose(){
       this.showParkInfo = false;
+    },
+
+    changeFilter(selection){
+      console.log(selection)
+      this.filters = selection;
     }
   },
 

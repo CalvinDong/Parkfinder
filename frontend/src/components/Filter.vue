@@ -1,8 +1,8 @@
 <template>
   <n-checkbox-group v-model:value="selection" @update:value="handleUpdateValue">
     <n-space item-style="display: flex;">
-      <n-checkbox value="Park" label="Park" />
-      <n-checkbox value="Lakes" label="Lakes" />
+      <n-checkbox value="park" label="Park" />
+      <n-checkbox value="lakes" label="Lakes" />
     </n-space>
   </n-checkbox-group>
 </template>
@@ -13,7 +13,7 @@ import { NCheckboxGroup } from "naive-ui";
 import { NSpace } from "naive-ui";
 
 export default {
-  name: "Filter",
+  name: "Filter", // Keep all values of checkbox lowercase for processing
 
   components: {
     NCheckboxGroup,
@@ -29,7 +29,7 @@ export default {
 
   methods: {
     handleUpdateValue(){
-      console.log(this.selection)
+      this.$emit('filter-chosen', this.selection)
     }
   }
 }
