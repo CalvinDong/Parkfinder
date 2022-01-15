@@ -14,12 +14,17 @@ export default {
 
   },
 
-  props:['mapStyle'],
+  props:['mapStyle', 'filters'],
 
   data() {
     return {
       backend: "http://localhost:4000",
-      testFile: null
+      testFile: null,
+      layersRegex: /park-layer$/,
+      colours: [
+        {name: "park", fillColor: 'rgba(200, 100, 240, 0.4)', fillOutlineColor: 'rgba(200, 100, 240, 1)'}, 
+        {name: "lake", fillColor: 'rgba(0, 230, 0, 0.4)', fillOutlineColor: 'rgba(0, 0, 240, 1)'}
+      ]
     };
   },
 
@@ -35,8 +40,58 @@ export default {
       return res.data
     },
 
+    getPaint(filter){
+       let result = this.colours.find(({ name }) => name === filter)
+       if (result === undefined){
+         result = {name: filter, fillColor: 'rgba(255, 255, 255, 0.4)', fillOutlineColor: 'rgba(0, 0, 0, 1)'}
+       }
+       return result
+    },
+
     async updateLayers(){
       this.map.setTerrain({ 'source': 'mapbox-dem', 'exaggeration': 1.2 });
+
+      this.filters.forEach(filter => {
+        /*if (this.map.getLayer(filter)) { // Still works if I don't remove it, but it gives me angry red warnings in the console if I don't
+          const layerColours = this.getPaint(filter)
+          this.map.removeLayer(filter);
+          this.map.addLayer({
+            'id':  `${filter}`,
+            'type': 'fill',
+            'source': 'testing',
+            'paint': {
+              'fill-color': layerColours.fillColor,
+              'fill-outline-color': layerColours.fillOutlineColor
+            },
+            'filter': ['==', filter, ["get", "type"]]
+          });
+        }*/
+        if (this.map.getLayer(filter)){
+          this.map.removeLayer(filter);
+        }
+
+        const layerColours = this.getPaint(filter)
+        this.map.addLayer({
+          'id':  `${filter}-park-layer`,
+          'type': 'fill',
+          'source': 'testing',
+          'paint': {
+            'fill-color': layerColours.fillColor,
+            'fill-outline-color': layerColours.fillOutlineColor
+          },
+          'filter': ['==', filter, ["get", "type"]]
+        });
+
+        this.map.on('click', `${filter}-layer`, async (e) => {
+          //const features = map.queryRenderedFeatures(e.point);
+          console.log("clicking")
+          const geoInfo = e.features[0].properties
+          this.getParkInfo(geoInfo)
+          this.$emit('layer-clicked', geoInfo)
+        })
+      })
+      
+      /*this.map.setTerrain({ 'source': 'mapbox-dem', 'exaggeration': 1.2 });
 
       if (this.map.getLayer('test-layer')) { // Still works if I don't remove it, but it gives me angry red warnings in the console if I don't
         this.map.removeLayer('test-layer');
@@ -50,7 +105,9 @@ export default {
           'fill-color': 'rgba(200, 100, 240, 0.4)',
           'fill-outline-color': 'rgba(200, 100, 240, 1)'
         },
-      });
+      });*/
+
+
     },
 
     async updateSource(){
@@ -104,42 +161,22 @@ export default {
         data: `http://localhost:4000/filter/${this.getTestFile}`
       });
 
-      this.map.addLayer({
-        'id':  `test-layer`,
-        'type': 'fill',
-        'source': 'testing',
-        'paint': {
-          'fill-color': 'rgba(200, 100, 240, 0.4)',
-          'fill-outline-color': 'rgba(200, 100, 240, 1)'
-        },
-      });
+      this.updateLayers()
 
-      this.map.addLayer({
-        'id': 'park-volcanoes',
-        'type': 'fill',
-        'source': 'testing',
-        'paint': {
-          'fill-color': 'rgba(90, 230, 20, 0.4)',
-          'fill-outline-color': 'rgba(200, 100, 240, 1)'
-        },
-        'filter': ['==', 23, ["get", "id"]]
-        });
+    })
 
-      })
-
-    this.map.on('click', 'test-layer', async (e) => {
-      console.log(e.features[0].properties)
-      console.log(e.features[0])
-      //const coordinates = e.features[0].geometry.coordinates.slice();
+    /*this.map.on('click', 'test-layer', async (e) => {
       const geoInfo = e.features[0].properties
       this.getParkInfo(geoInfo)
       this.$emit('layer-clicked', geoInfo)
-      /*const info = await axios.post(`http://localhost:4000/queries/${geoInfo.type}/${geoInfo.id}`)
-      new mapboxgl.Popup()
-        .setLngLat(e.lngLat)
-        .setHTML(`<strong>${geoInfo.name}</strong><p>${info.data.description}</p>`)
-        .addTo(this.map);*/
-      })
+    })*/
+
+    this.map.on('click', async (e) => {
+      const features = this.map.queryRenderedFeatures(e.point);
+      console.log(features)
+      const parkLayers = features.filter((layer) => this.layersRegex.test(layer.layer.id) == true);
+      console.log(parkLayers);
+    })
 
     
   },
