@@ -1,6 +1,6 @@
 <template>
   <div class="container">
-    <Map :mapStyle="mapStyle" @layer-clicked="parkChosen"/>
+    <Map :mapStyle="mapStyle" :filters="filters" @layer-clicked="parkChosen"/>
     <div class="child child-1">
       <Radio @style-chosen="changeStyle"/>
     </div>
@@ -46,7 +46,8 @@ export default {
       mapStyle: "",
       showAbout: false,
       geoInfo: null,
-      showParkInfo: false
+      showParkInfo: false,
+      filters: ["park", "lake"]
     }
   },
 

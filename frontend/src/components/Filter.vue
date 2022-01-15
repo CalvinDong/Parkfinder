@@ -1,10 +1,8 @@
 <template>
-  <n-checkbox-group v-model:value="cities" @update:value="handleUpdateValue">
+  <n-checkbox-group v-model:value="selection" @update:value="handleUpdateValue">
     <n-space item-style="display: flex;">
-      <n-checkbox value="Beijing" label="Beijing" />
-      <n-checkbox value="Shanghai" label="Shanghai" />
-      <n-checkbox value="Guangzhou" label="Guangzhou" />
-      <n-checkbox value="Shenzen" label="Shenzhen" />
+      <n-checkbox value="Park" label="Park" />
+      <n-checkbox value="Lake" label="Lake" />
     </n-space>
   </n-checkbox-group>
 </template>
@@ -25,14 +23,13 @@ export default {
 
   data() {
     return {
-      selection: 'local',
-      cities: null
+      selection: null,
     }
   },
 
   methods: {
     handleUpdateValue(){
-      console.log(this.cities)
+      console.log(this.selection)
     }
   }
 }
