@@ -43,6 +43,8 @@ export default new class SqliteService{
   }
 
   public async GetPark(table: string, id: string){
+    console.log(table)
+    console.log(id)
     const prepare = this.db.prepare(
       `SELECT * FROM ${table} WHERE id=${id}`
     )

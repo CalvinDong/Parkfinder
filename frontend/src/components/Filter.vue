@@ -2,7 +2,7 @@
   <n-checkbox-group v-model:value="selection" @update:value="handleUpdateValue">
     <n-space item-style="display: flex;">
       <n-checkbox value="Park" label="Park" />
-      <n-checkbox value="Lake" label="Lake" />
+      <n-checkbox value="Lakes" label="Lakes" />
     </n-space>
   </n-checkbox-group>
 </template>

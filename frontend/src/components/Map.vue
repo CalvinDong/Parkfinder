@@ -23,7 +23,7 @@ export default {
       layersRegex: /park-layer$/,
       colours: [
         {name: "park", fillColor: 'rgba(200, 100, 240, 0.4)', fillOutlineColor: 'rgba(200, 100, 240, 1)'}, 
-        {name: "lake", fillColor: 'rgba(0, 230, 0, 0.4)', fillOutlineColor: 'rgba(0, 0, 240, 1)'}
+        {name: "lakes", fillColor: 'rgba(0, 230, 0, 0.4)', fillOutlineColor: 'rgba(0, 0, 240, 1)'}
       ]
     };
   },
@@ -35,10 +35,12 @@ export default {
   },
 
   methods: {
+
     async getFile(){
       const res = await axios.post(`${this.backend}/filter`)
       return res.data
     },
+
 
     getPaint(filter){
        let result = this.colours.find(({ name }) => name === filter)
@@ -48,24 +50,11 @@ export default {
        return result
     },
 
+
     async updateLayers(){
       this.map.setTerrain({ 'source': 'mapbox-dem', 'exaggeration': 1.2 });
 
       this.filters.forEach(filter => {
-        /*if (this.map.getLayer(filter)) { // Still works if I don't remove it, but it gives me angry red warnings in the console if I don't
-          const layerColours = this.getPaint(filter)
-          this.map.removeLayer(filter);
-          this.map.addLayer({
-            'id':  `${filter}`,
-            'type': 'fill',
-            'source': 'testing',
-            'paint': {
-              'fill-color': layerColours.fillColor,
-              'fill-outline-color': layerColours.fillOutlineColor
-            },
-            'filter': ['==', filter, ["get", "type"]]
-          });
-        }*/
         if (this.map.getLayer(filter)){
           this.map.removeLayer(filter);
         }
@@ -81,40 +70,16 @@ export default {
           },
           'filter': ['==', filter, ["get", "type"]]
         });
-
-        this.map.on('click', `${filter}-layer`, async (e) => {
-          //const features = map.queryRenderedFeatures(e.point);
-          console.log("clicking")
-          const geoInfo = e.features[0].properties
-          this.getParkInfo(geoInfo)
-          this.$emit('layer-clicked', geoInfo)
-        })
       })
-      
-      /*this.map.setTerrain({ 'source': 'mapbox-dem', 'exaggeration': 1.2 });
-
-      if (this.map.getLayer('test-layer')) { // Still works if I don't remove it, but it gives me angry red warnings in the console if I don't
-        this.map.removeLayer('test-layer');
-      }
-
-      this.map.addLayer({
-        'id':  `test-layer`,
-        'type': 'fill',
-        'source': 'testing',
-        'paint': {
-          'fill-color': 'rgba(200, 100, 240, 0.4)',
-          'fill-outline-color': 'rgba(200, 100, 240, 1)'
-        },
-      });*/
-
-
     },
+
 
     async updateSource(){
       this.getTestFile = await this.getFile()
       const geoJSONSrc = this.map.getSource('testing')
       geoJSONSrc.setData(`http://localhost:4000/filter/${this.getTestFile}`)
     },
+
 
     async changeStyle(){
       await this.map.setStyle('mapbox://styles/mapbox/' + this.mapStyle)
@@ -126,8 +91,6 @@ export default {
 
     async getParkInfo(geoInfo){
       this.$emit('layer-clicked', geoInfo)
-      /*const info = await axios.post(`http://localhost:4000/queries/${info.type}/${info.id}`)
-      return info*/
     }
   },
 
@@ -154,8 +117,6 @@ export default {
         'maxzoom': 14
       });
 
-      this.map.setTerrain({ 'source': 'mapbox-dem', 'exaggeration': 1.2 });
-
       this.map.addSource('testing', {
         type: 'geojson',
         data: `http://localhost:4000/filter/${this.getTestFile}`
@@ -165,17 +126,13 @@ export default {
 
     })
 
-    /*this.map.on('click', 'test-layer', async (e) => {
-      const geoInfo = e.features[0].properties
-      this.getParkInfo(geoInfo)
-      this.$emit('layer-clicked', geoInfo)
-    })*/
-
     this.map.on('click', async (e) => {
       const features = this.map.queryRenderedFeatures(e.point);
-      console.log(features)
-      const parkLayers = features.filter((layer) => this.layersRegex.test(layer.layer.id) == true);
-      console.log(parkLayers);
+      const parkLayers = features.filter((layer) => this.layersRegex.test(layer.layer.id) == true); // Using regular expressions to find our geoJSON layers
+      const geoInfo = parkLayers[0].properties
+      console.log(geoInfo)
+      this.getParkInfo(geoInfo)
+      this.$emit('layer-clicked', geoInfo)
     })
 
     

@@ -47,7 +47,7 @@ export default {
       showAbout: false,
       geoInfo: null,
       showParkInfo: false,
-      filters: ["park", "lake"]
+      filters: ["park", "lakes"]
     }
   },
 
@@ -61,7 +61,6 @@ export default {
     },
 
     parkChosen(geoInfo){ // Make it so it doesn't send a request to backend if park already selected
-      console.log("layer clicked")
       this.showParkInfo = true;
       this.geoInfo = geoInfo;
     },
