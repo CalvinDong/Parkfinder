@@ -70,6 +70,7 @@ export default {
 
       for (const filter in this.filters) {
         const layerColours = this.getPaint(this.filters[filter])
+        
         this.map.addLayer({
           'id':  `${this.filters[filter]}${this.layerIds}`,
           'type': 'fill',
@@ -83,24 +84,6 @@ export default {
       }
 
       this.currentLayers = this.filters;
-
-      /*this.filters.forEach(filter => {
-        if (this.map.getLayer(`${filter}${this.layerIds}`)){
-          this.map.removeLayer(`${filter}${this.layerIds}`);
-        }
-
-        const layerColours = this.getPaint(filter)
-        this.map.addLayer({
-          'id':  `${filter}${this.layerIds}`,
-          'type': 'fill',
-          'source': 'park-source',
-          'paint': {
-            'fill-color': layerColours.fillColor,
-            'fill-outline-color': layerColours.fillOutlineColor
-          },
-          'filter': ['==', filter, ["get", "type"]]
-        });
-      })*/
     },
 
 

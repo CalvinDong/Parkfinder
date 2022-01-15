@@ -70,7 +70,6 @@ export default {
     },
 
     changeFilter(selection){
-      console.log(selection)
       this.filters = selection;
     }
   },
