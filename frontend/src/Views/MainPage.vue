@@ -1,6 +1,6 @@
 <template>
   <div class="container">
-    <Map :mapStyle="mapStyle"/>
+    <Map :mapStyle="mapStyle" :filters="filters" @layer-clicked="parkChosen"/>
     <div class="child child-1">
       <Radio @style-chosen="changeStyle"/>
     </div>
@@ -10,29 +10,44 @@
       </transition>
     </div>
     <div class="child child-3">
-      <Button v-on:click="onClick()"> About </Button>
+      <NButton type="primary" v-on:click="onClick()"> About </NButton>
+    </div>
+    <div class="child child-4">
+      <ParkInfo :geoInfo="geoInfo" @park-info-close="handleParkClose" v-show="showParkInfo"/>
+    </div>
+    <div class="child child-5">
+      <Filter @filter-chosen="changeFilter"/>
     </div>
   </div>
 </template>
 
 <script>
-//import Radio from "../components/Radio"
+import Radio from "../components/Radio"
 import Map from "../components/Map"
 import About from "../components/About"
-import Radio from "../components/Radio"
+import ParkInfo from "../components/ParkInfo.vue"
+import Filter from "../components/Filter.vue"
+
+import { NButton } from "naive-ui"
 
 export default {
   name: 'MainPage',
   components: {
     Map,
     About,
-    Radio
+    Radio,
+    ParkInfo,
+    Filter,
+    NButton
   },
 
   data(){
     return{
       mapStyle: "",
-      showAbout: false
+      showAbout: false,
+      geoInfo: null,
+      showParkInfo: false,
+      filters: null
     }
   },
 
@@ -44,6 +59,19 @@ export default {
     onClick(){
       this.showAbout = !this.showAbout;
     },
+
+    parkChosen(geoInfo){ // Make it so it doesn't send a request to backend if park already selected
+      this.showParkInfo = true;
+      this.geoInfo = geoInfo;
+    },
+
+    handleParkClose(){
+      this.showParkInfo = false;
+    },
+
+    changeFilter(selection){
+      this.filters = selection;
+    }
   },
 
   props: {
@@ -59,10 +87,14 @@ export default {
     z-index: 3;
     background: yellow;
   }
+  .container-2{
+    position: relative;
+    z-index: 3;
+    background: yellow;
+  }
 
   .child{
     position: absolute;
-    background: red;
   }
 
   .child-1{
@@ -70,12 +102,10 @@ export default {
     left: 1vw;
     width: 35%;
     height: auto;
-    background: blue
   }
 
   .child-2{
     margin: 0 auto;
-    background: yellow;
     position: absolute;
     left: 50%;
     top: 50%;
@@ -88,7 +118,20 @@ export default {
     right: 20px;
     width: auto;
     height: auto;
-    background: blue
+  }
+
+  .child-4{
+    top: 50vh;
+    left: 1vw;
+    transform: translate(0, -50%);
+    max-width: 200px;
+  }
+
+  .child-5{
+    top: 50vh;
+    right: 1vw;
+    transform: translate(0, -50%);
+    max-width: 200px;
   }
 
   .fade-enter-from-active, .fade-leave-active {

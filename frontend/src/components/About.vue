@@ -14,16 +14,9 @@
 </template>
 
 <script>
-import axios from "axios"
 
 export default {
   name: 'About',
-
-  async data() {
-    return {
-      image: await axios.get("http://localhost:4000/getAbout")
-    }
-  },
 
   methods: {
     onClick(){
@@ -39,6 +32,7 @@ export default {
     transition: 0.3s;
     width: 25vw;
     height: 25vw;
+    background-color: white;
     position: relative
   }
 
