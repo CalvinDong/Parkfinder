@@ -1,16 +1,16 @@
 import Database from "better-sqlite3"
-import {Database as SqliteDatabase} from "better-sqlite3"
+import { Database as SqliteDatabase } from "better-sqlite3"
 
 import config from './config'
 
-export default new class SqliteService{
+export default new class SqliteService {
   private db: SqliteDatabase
-  
-  constructor(){
+
+  constructor() {
     this.db = new Database(config.DB_NAME, { verbose: console.log, readonly: true }); // Should make function that handles when db can't be found
   }
 
-  public async ReadAll(){
+  public async ReadAll() {
     /*const testStatement = "Parks, BBQ";
     const readEverything = this.db.prepare(
       `SELECT * FROM ${testStatement}`
@@ -22,7 +22,7 @@ export default new class SqliteService{
     return result
   }
 
-  public async ReadAllTableNames(){
+  public async ReadAllTableNames() {
     const readEveryTable = this.db.prepare(
       `SELECT name FROM sqlite_master WHERE type='table'`
     );
@@ -30,7 +30,7 @@ export default new class SqliteService{
     return result
   }
 
-  public async ReadFilter(filter:Array<string>){
+  public async ReadFilter(filter: Array<string>) {
     let result: any = [];
     filter.forEach(async (option) => {
       let readTable = this.db.prepare(
@@ -42,7 +42,7 @@ export default new class SqliteService{
     return result;
   }
 
-  public async GetPark(table: string, id: string){
+  public async GetPark(table: string, id: string) {
     console.log(table)
     console.log(id)
     const prepare = this.db.prepare(
