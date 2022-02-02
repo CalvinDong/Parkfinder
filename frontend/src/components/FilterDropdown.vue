@@ -48,7 +48,13 @@ export default {
 
   methods:{
     customRender(){
-      return h(Filter)
+      return h(
+        'div',
+        {
+          style: 'display: flex; align-items: center; padding: 8px 12px;'
+        },
+        h(Filter)
+      )
     }
   }
 }
