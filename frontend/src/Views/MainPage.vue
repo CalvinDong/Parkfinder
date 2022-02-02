@@ -18,6 +18,9 @@
     <div class="child child-5">
       <Filter @filter-chosen="changeFilter"/>
     </div>
+    <div class="child child-6">
+      <FilterDropdown/>
+    </div>
   </div>
 </template>
 
@@ -27,6 +30,7 @@ import Map from "../components/Map"
 import About from "../components/About"
 import ParkInfo from "../components/ParkInfo.vue"
 import Filter from "../components/Filter.vue"
+import FilterDropdown from "../components/FilterDropdown.vue"
 
 import { NButton } from "naive-ui"
 
@@ -38,7 +42,8 @@ export default {
     Radio,
     ParkInfo,
     Filter,
-    NButton
+    NButton,
+    FilterDropdown
   },
 
   data(){
@@ -132,6 +137,12 @@ export default {
     right: 1vw;
     transform: translate(0, -50%);
     max-width: 200px;
+  }
+
+  .child-6{
+    top: 1vh;
+    left: 50%;
+    transform: translate(-50%, 0);
   }
 
   .fade-enter-from-active, .fade-leave-active {

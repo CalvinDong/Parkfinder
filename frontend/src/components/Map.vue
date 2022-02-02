@@ -27,6 +27,8 @@ export default {
         {name: "lakes", fillColor: 'rgba(0, 230, 0, 0.4)', fillOutlineColor: 'rgba(0, 0, 240, 1)'}
       ],
       currentLayers: null,
+      parkOrder: ["local", "reserve", "national"],
+      amenitiesOrder: []
     };
   },
 
@@ -79,7 +81,7 @@ export default {
             'fill-color': layerColours.fillColor,
             'fill-outline-color': layerColours.fillOutlineColor
           },
-          'filter': ['==', this.filters[filter], ["get", "type"]]
+          'filter': ['==', this.filters[filter], ["get", "type"]] // Regular expression that separates the layers in the GEOjson file via the "type" property
         });
       }
 
@@ -90,7 +92,7 @@ export default {
     async updateSource(){
       this.getTestFile = await this.getFile()
       const geoJSONSrc = this.map.getSource('park-source')
-      geoJSONSrc.setData(`http://localhost:4000/filter/${this.getTestFile}`)
+      geoJSONSrc.setData(`${this.backend}/filter/${this.getTestFile}`)
     },
 
 
@@ -133,7 +135,7 @@ export default {
 
       this.map.addSource('park-source', {
         type: 'geojson',
-        data: `http://localhost:4000/filter/${this.getTestFile}`
+        data: `${this.backend}/filter/${this.getTestFile}`
       });
 
       this.updateLayers()
