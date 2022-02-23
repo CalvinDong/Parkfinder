@@ -27,8 +27,8 @@ export default {
         {name: "lakes", fillColor: 'rgba(0, 230, 0, 0.4)', fillOutlineColor: 'rgba(0, 0, 240, 1)'}
       ],
       currentLayers: null,
-      parkOrder: ["local", "reserve", "national"],
-      amenitiesOrder: []
+      layerOrder: ["park", "lake"]
+
     };
   },
 
@@ -106,6 +106,10 @@ export default {
 
     async getParkInfo(geoInfo){
       this.$emit('layer-clicked', geoInfo)
+    },
+
+    async orderLayers(){
+      this.map.moveLayer();
     }
   },
 
