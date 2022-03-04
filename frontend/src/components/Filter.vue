@@ -1,7 +1,9 @@
 <template>
-  <div v-for="filter in filters" :key="filter.label">
-    <n-checkbox :value="filter.value" :label="filter.label" v-model:value="selection" @update:value="handleUpdateValue"/>
-  </div>
+  <n-checkbox-group v-model:value="selection" @update:value="handleUpdateValue">
+      <div v-for="filter in filters" v-bind:key="filter.label">
+        <n-checkbox :value="filter.value" :label="filter.label" />
+      </div>
+  </n-checkbox-group>
 </template>
 
 <script>
@@ -22,13 +24,13 @@ export default {
   data() {
     return {
       selection: null,
-      filters: [{value: "park", label: "Park"}, {value: "lakes", label: "Lakes"}]
+      filters: config.PARKORDER
+      //filters: [{value: "park", label: "Park"}, {value: "lakes", label: "Lakes"}]
     }
   },
 
   methods: {
     handleUpdateValue(){
-      console.log(this.selection)
       this.$emit('filter-chosen', this.selection)
     }
   }
