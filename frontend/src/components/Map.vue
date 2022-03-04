@@ -7,6 +7,7 @@
 <script>
 import mapboxgl from "mapbox-gl";
 import axios from "axios"
+import config from "../assets/config"
 
 export default {
   name: "Map",
@@ -109,14 +110,17 @@ export default {
     },
 
     async orderLayers(){
+      this.map.moveLayer(this.layerOrder[-1]);
+      this.layerOrder.forEach()
       this.map.moveLayer();
     }
   },
-
+ 
   created(){
     mapboxgl.accessToken = `${process.env.VUE_APP_TOKEN}`;
     this.map = null;
     this.currentLayers = this.filters; 
+    console.log(config.PARKORDER)
   },
 
   async mounted(){
