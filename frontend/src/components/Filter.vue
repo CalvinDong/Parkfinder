@@ -1,6 +1,6 @@
 <template>
   <n-checkbox-group v-model:value="selection" @update:value="handleUpdateValue">
-      <div v-for="filter in filters" v-bind:key="filter.label">
+      <div class="test" v-for="filter in filters" v-bind:key="filter.label">
         <n-checkbox :value="filter.value" :label="filter.label" />
       </div>
   </n-checkbox-group>
@@ -31,12 +31,16 @@ export default {
 
   methods: {
     handleUpdateValue(){
-      this.$emit('filter-chosen', this.selection)
+      this.$emit('filter-chosen', this.selection) // emits to MainPage.vue
     }
   }
 }
 </script>
 
-<style>
-
+<style scoped>
+  .test{
+    display: flex; 
+    align-items: center; 
+    padding: 8px 12px;
+  }
 </style>
