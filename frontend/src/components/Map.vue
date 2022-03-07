@@ -23,13 +23,11 @@ export default {
       testFile: null,
       layersRegex: /park-layer$/,
       layerIds: "-park-layer",
-      colours: [
+      colours: [ // move to config file?
         {name: "park", fillColor: 'rgba(200, 100, 240, 0.4)', fillOutlineColor: 'rgba(200, 100, 240, 1)'}, 
         {name: "lakes", fillColor: 'rgba(0, 230, 0, 0.4)', fillOutlineColor: 'rgba(0, 0, 240, 1)'}
       ],
       currentLayers: null,
-      layerOrder: ["park", "lake"]
-
     };
   },
 
@@ -39,7 +37,8 @@ export default {
     },
     filters(){
       this.updateSource();
-      this.updateLayers()
+      this.updateLayers();
+      this.orderLayers();
     }
   },
 
@@ -106,20 +105,22 @@ export default {
     },
 
     async getParkInfo(geoInfo){
-      this.$emit('layer-clicked', geoInfo)
+      this.$emit('layer-clicked', geoInfo);
     },
 
-    async orderLayers(){
-      this.map.moveLayer(this.layerOrder[-1]);
-      this.layerOrder.forEach()
-      this.map.moveLayer();
+    async orderLayers(){ // Change later so that it only orders the current layers, or just order it during update layers ,method
+      for (let i = 0; i < config.PARKORDER.length; i++){
+        console.log(config.PARKORDER[i].value)
+        this.map.moveLayer(`${config.PARKORDER[i].value}${this.layerIds}`)
+      }
+      //this.map.moveLayer();
     }
   },
  
   created(){
     mapboxgl.accessToken = `${process.env.VUE_APP_TOKEN}`;
     this.map = null;
-    this.currentLayers = this.filters; 
+    this.currentLayers = this.filters;  // current loaded layers recorded so we know which ones to remove later
     console.log(config.PARKORDER)
   },
 
