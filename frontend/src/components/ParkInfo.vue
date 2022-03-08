@@ -1,5 +1,10 @@
 <template>
-  <n-card v-bind:title="this.name" closable @close="handleClose"> {{this.info}} </n-card>
+  <n-card v-bind:title="this.name" closable @close="handleClose"> 
+    <template #cover>
+      <img :src=img>
+    </template>
+    {{this.info}} 
+  </n-card>
 </template>
 
 <script>
@@ -18,7 +23,7 @@ export default {
     return {
       name: null,
       info: null,
-      img: null
+      img: "https://firebasestorage.googleapis.com/v0/b/parkfinder-cd1be.appspot.com/o/IMG_5080-3.jpg?alt=media&token=89ee23ba-bf5c-4bc8-877c-5ef99f084678"
     }
   },
 
