@@ -31,8 +31,8 @@ export default {
   methods: {
     async populateInfo(infoGeo){
       const info = await axios.post(`http://localhost:4000/queries/${infoGeo.type}/${infoGeo.id}`)
-      //this.name = info.data.name;
-      this.name = infoGeo.name;
+      this.name = info.data.name;
+      //this.name = infoGeo.name;
       this.info = info.data.description
     },
 

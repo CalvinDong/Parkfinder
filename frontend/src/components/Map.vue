@@ -104,16 +104,11 @@ export default {
       })
     },
 
-    async getParkInfo(geoInfo){
-      this.$emit('layer-clicked', geoInfo);
-    },
-
     async orderLayers(){ // Change later so that it only orders the current layers, or just order it during update layers ,method
       for (let i = 0; i < config.PARKORDER.length; i++){
-        console.log(config.PARKORDER[i].value)
-        this.map.moveLayer(`${config.PARKORDER[i].value}${this.layerIds}`)
+        console.log(config.PARKORDER[i].value);
+        this.map.moveLayer(`${config.PARKORDER[i].value}${this.layerIds}`);
       }
-      //this.map.moveLayer();
     }
   },
  
@@ -155,8 +150,7 @@ export default {
       const features = this.map.queryRenderedFeatures(e.point);
       const parkLayers = features.filter((layer) => this.layersRegex.test(layer.layer.id) == true); // Using regular expressions to find our geoJSON layers
       if (parkLayers.length > 0){
-        const geoInfo = parkLayers[0].properties
-        this.getParkInfo(geoInfo)
+        const geoInfo = parkLayers[0].properties // Take the one on top only
         this.$emit('layer-clicked', geoInfo) // Have to figure out if we want different behaviours on bbq, parks, lakes, etc layers clicked
       }
     })
