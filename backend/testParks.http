@@ -6,4 +6,13 @@
 
 //GET http://localhost:4000/filter/b7a8bd28-711f-4b1f-946c-3f12b16121db
 
-POST http://localhost:4000/queries/local/23
+//POST http://localhost:4000/queries/local/23
+
+POST http://localhost:4000/getParkImages HTTP/1.1
+content-type: application/json
+
+{
+    "name": "St Johns Park",
+    "type": "park",
+    "id": 1
+}
