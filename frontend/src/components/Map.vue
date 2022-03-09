@@ -7,6 +7,7 @@
 <script>
 import mapboxgl from "mapbox-gl";
 import axios from "axios"
+import config from "../assets/config"
 
 export default {
   name: "Map",
@@ -22,7 +23,7 @@ export default {
       testFile: null,
       layersRegex: /park-layer$/,
       layerIds: "-park-layer",
-      colours: [
+      colours: [ // move to config file?
         {name: "park", fillColor: 'rgba(200, 100, 240, 0.4)', fillOutlineColor: 'rgba(200, 100, 240, 1)'}, 
         {name: "lakes", fillColor: 'rgba(0, 230, 0, 0.4)', fillOutlineColor: 'rgba(0, 0, 240, 1)'}
       ],
@@ -36,7 +37,8 @@ export default {
     },
     filters(){
       this.updateSource();
-      this.updateLayers()
+      this.updateLayers();
+      this.orderLayers();
     }
   },
 
@@ -79,7 +81,7 @@ export default {
             'fill-color': layerColours.fillColor,
             'fill-outline-color': layerColours.fillOutlineColor
           },
-          'filter': ['==', this.filters[filter], ["get", "type"]]
+          'filter': ['==', this.filters[filter], ["get", "type"]] // Regular expression that separates the layers in the GEOjson file via the "type" property
         });
       }
 
@@ -90,7 +92,7 @@ export default {
     async updateSource(){
       this.getTestFile = await this.getFile()
       const geoJSONSrc = this.map.getSource('park-source')
-      geoJSONSrc.setData(`http://localhost:4000/filter/${this.getTestFile}`)
+      geoJSONSrc.setData(`${this.backend}/filter/${this.getTestFile}`)
     },
 
 
@@ -102,15 +104,19 @@ export default {
       })
     },
 
-    async getParkInfo(geoInfo){
-      this.$emit('layer-clicked', geoInfo)
+    async orderLayers(){ // Change later so that it only orders the current layers, or just order it during update layers ,method
+      for (let i = 0; i < config.PARKORDER.length; i++){
+        console.log(config.PARKORDER[i].value);
+        this.map.moveLayer(`${config.PARKORDER[i].value}${this.layerIds}`);
+      }
     }
   },
-
+ 
   created(){
     mapboxgl.accessToken = `${process.env.VUE_APP_TOKEN}`;
     this.map = null;
-    this.currentLayers = this.filters; 
+    this.currentLayers = this.filters;  // current loaded layers recorded so we know which ones to remove later
+    console.log(config.PARKORDER)
   },
 
   async mounted(){
@@ -133,7 +139,7 @@ export default {
 
       this.map.addSource('park-source', {
         type: 'geojson',
-        data: `http://localhost:4000/filter/${this.getTestFile}`
+        data: `${this.backend}/filter/${this.getTestFile}`
       });
 
       this.updateLayers()
@@ -144,8 +150,7 @@ export default {
       const features = this.map.queryRenderedFeatures(e.point);
       const parkLayers = features.filter((layer) => this.layersRegex.test(layer.layer.id) == true); // Using regular expressions to find our geoJSON layers
       if (parkLayers.length > 0){
-        const geoInfo = parkLayers[0].properties
-        this.getParkInfo(geoInfo)
+        const geoInfo = parkLayers[0].properties // Take the one on top only
         this.$emit('layer-clicked', geoInfo) // Have to figure out if we want different behaviours on bbq, parks, lakes, etc layers clicked
       }
     })

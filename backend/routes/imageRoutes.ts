@@ -9,7 +9,10 @@ export class ImageRoutes extends CommonRoutesConfig {
 
     configureRoutes() {
       this.app.route(`/getAbout`)
-      .get(ImageController.aboutImage)
+      .get(ImageController.aboutImage);
+
+      this.app.route('/getParkImages')
+      .post(ImageController.getParkImages);
       
     return this.app;
   }
