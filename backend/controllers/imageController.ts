@@ -7,35 +7,44 @@ import debug from 'debug';
 const log: debug.IDebugger = debug('app:users-controller');
 
 export default new class ImageController{
-  static async setDate(offset: number){
-    let date = new Date()
-    let day = date.getDate() + offset;
-    let month = String(date.getMonth()+1).padStart(2, "0");
-    let year = date.getFullYear();
-    return `${day}-${month}-${year}.`;
-  }
-
   static async getMetadata(file: File){
     let metadata = await file.getMetadata()
     return metadata;
   }
 
   static async getLinks(fileNameScheme: string){
-    let expiryDate = await ImageController.setDate(1);
     let max = 5;
     let links = [];
 
-    for (let i = 0; i < max; i++){
+    /*for (let i = 0; i < max; i++){
       let fileName = `${fileNameScheme} ${i}.jpg` // All images will have to be jpgs or we have to store info about the images somewhere else
       let file = bucket.file(fileName)
 
       let exists = await file.exists();
       if (exists[0]){
+        file.isPublic(function(err, resp) {
+          if (err) { // If not public then make it so
+            console.error(err);
+            file.makePublic();
+          }
+        })
+        let publicUrl = file.publicUrl();
+        links.push({id: i, imgUrl: publicUrl});
+      }
+    }*/
+
+    for (let i = 0; i < max; i++){
+      let fileName = `${fileNameScheme} ${i}.jpg` // All images will have to be jpgs or we have to store info about the images somewhere else
+      let file = bucket.file(fileName)
+      let exists = await file.exists();
+      console.log(fileName)
+      if (exists[0]){
         let publicUrl = await file.getSignedUrl({
+          version: 'v2',
           action: 'read',
-          expires: expiryDate
+          expires: Date.now() + 1000 * 60 * 60, // one hour
         });
-        links.push(publicUrl);
+        links.push({image: publicUrl[0]});
       }
     }
 
@@ -92,6 +101,7 @@ export default new class ImageController{
     if (links.length == 0){ // Default if folder is not found
       links = await ImageController.getLinks(`Default/Default`);
     }
+
     return res.status(200).send(links)
   }
 }
