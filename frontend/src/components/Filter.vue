@@ -1,8 +1,6 @@
 <template>
   <n-checkbox-group v-model:value="selection" @update:value="handleUpdateValue">
-      <div class="test" v-for="filter in filters" v-bind:key="filter.label">
-        <n-checkbox :value="filter.value" :label="filter.label" />
-      </div>
+    <n-checkbox v-for="filter in filters" v-bind:key="filter.label" :value="filter.value" :label="filter.label " />
   </n-checkbox-group>
 </template>
 
