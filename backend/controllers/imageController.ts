@@ -16,28 +16,11 @@ export default new class ImageController{
     let max = 5;
     let links = [];
 
-    /*for (let i = 0; i < max; i++){
-      let fileName = `${fileNameScheme} ${i}.jpg` // All images will have to be jpgs or we have to store info about the images somewhere else
-      let file = bucket.file(fileName)
-
-      let exists = await file.exists();
-      if (exists[0]){
-        file.isPublic(function(err, resp) {
-          if (err) { // If not public then make it so
-            console.error(err);
-            file.makePublic();
-          }
-        })
-        let publicUrl = file.publicUrl();
-        links.push({id: i, imgUrl: publicUrl});
-      }
-    }*/
-
     for (let i = 0; i < max; i++){
       let fileName = `${fileNameScheme} ${i}.jpg` // All images will have to be jpgs or we have to store info about the images somewhere else
       let file = bucket.file(fileName)
       let exists = await file.exists();
-      console.log(fileName)
+
       if (exists[0]){
         let publicUrl = await file.getSignedUrl({
           version: 'v2',
