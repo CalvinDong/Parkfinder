@@ -47,13 +47,17 @@ export default {
   },
 
   methods:{
+    changeFilter(selection){
+      console.log("hello")
+    },
+
     customRender(){
       return h(
         'div',
         {
           style: 'display: flex; align-items: center; padding: 8px 12px;'
         },
-        h(Filter)
+        [h(Filter)]
       )
     }
   }

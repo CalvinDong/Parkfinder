@@ -1,7 +1,7 @@
 <template>
   <n-card v-bind:title="this.name" closable @close="handleClose">
     <template #cover class="cover"> 
-      <vueper-slides fade: fixed-height="240px" touchable="false" class="carousel-img">
+      <vueper-slides fixed-height="240px" touchable="false" class="carousel-img">
         <vueper-slide v-for="(slide, i) in slides" :key="i" :image="slide.image"/>
       </vueper-slides>
     </template>
@@ -43,6 +43,7 @@ export default {
       name: null,
       info: null,
       slides: null,
+      initSlide: 2
     }
   },
 
@@ -105,6 +106,20 @@ export default {
     width: 100%;
     height: 240px;
     object-fit: cover;
+  }
+
+  .loader {
+  border: 16px solid #f3f3f3; /* Light grey */
+  border-top: 16px solid #3498db; /* Blue */
+  border-radius: 50%;
+  width: 120px;
+  height: 120px;
+  animation: spin 2s linear infinite;
+  }
+
+  @keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
   }
 
 </style>

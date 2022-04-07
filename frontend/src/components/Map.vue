@@ -150,7 +150,7 @@ export default {
       const features = this.map.queryRenderedFeatures(e.point);
       const parkLayers = features.filter((layer) => this.layersRegex.test(layer.layer.id) == true); // Using regular expressions to find our geoJSON layers
       if (parkLayers.length > 0){
-        const geoInfo = parkLayers[0].properties // Take the one on top only
+        const geoInfo = parkLayers[0].properties // Take the layer on top only
         this.$emit('layer-clicked', geoInfo) // Have to figure out if we want different behaviours on bbq, parks, lakes, etc layers clicked
       }
     })

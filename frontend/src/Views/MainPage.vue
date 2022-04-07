@@ -19,7 +19,7 @@
       <Filter @filter-chosen="changeFilter"/>
     </div>
     <div class="child child-6">
-      <FilterDropdown/>
+      <FilterDropdown @filter-chosen="changeFilter"/>
     </div>
   </div>
 </template>
@@ -67,7 +67,9 @@ export default {
 
     parkChosen(geoInfo){ // Make it so it doesn't send a request to backend if park already selected
       this.showParkInfo = true;
-      this.geoInfo = geoInfo;
+      if (this.geoInfo == null || (this.geoInfo.id != geoInfo.id && this.geoInfo.name != geoInfo.name)){ // What happens if name and id are the same?
+        this.geoInfo = geoInfo;
+      }
     },
 
     handleParkClose(){
