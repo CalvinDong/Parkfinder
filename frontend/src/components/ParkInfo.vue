@@ -5,7 +5,10 @@
         <vueper-slide v-for="(slide, i) in slides" :key="i" :image="slide.image"/>
       </vueper-slides>
     </template>
-    {{this.info}} 
+    <p>{{this.info}}</p> 
+     <div class="amenities-wrapper">
+        <div class="amenities" v-for="(value, key) in amenities" :key="key">{{key}}: {{value}}</div>
+    </div>
   </n-card>
 </template>
 
@@ -43,7 +46,8 @@ export default {
       name: null,
       info: null,
       slides: null,
-      initSlide: 2
+      initSlide: 2,
+      amenities: null
     }
   },
 
@@ -56,9 +60,17 @@ export default {
   methods: {
     async populateInfo(infoGeo){
       const info = await axios.post(`http://localhost:4000/queries/${infoGeo.type}/${infoGeo.id}`)
-      this.name = info.data.name;
+      this.name = info.data.name; 
       //this.name = infoGeo.name;
-      this.info = info.data.description
+      this.info = info.data.description;
+      this.amenities = info.data;
+      
+      Object.keys(this.amenities).forEach(key => {
+        if (key == "location" || key == "name" || key == "id" || key == "baseId" || key == "description" ||this.amenities[key] === null){
+          delete this.amenities[key];
+        }
+      })
+      
       let imgRes = await axios.post(`http://localhost:4000/getParkImages`,{
         name: info.data.name,
         type: info.data.type,
@@ -108,18 +120,14 @@ export default {
     object-fit: cover;
   }
 
-  .loader {
-  border: 16px solid #f3f3f3; /* Light grey */
-  border-top: 16px solid #3498db; /* Blue */
-  border-radius: 50%;
-  width: 120px;
-  height: 120px;
-  animation: spin 2s linear infinite;
+  .amenities-wrapper {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    grid-auto-rows: 20px;
   }
 
-  @keyframes spin {
-    0% { transform: rotate(0deg); }
-    100% { transform: rotate(360deg); }
+  .amenities {
+    color: lightgray;
   }
 
 </style>
