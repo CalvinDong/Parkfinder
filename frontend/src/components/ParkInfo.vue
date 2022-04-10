@@ -1,20 +1,30 @@
 <template>
-  <n-card v-bind:title="this.name" closable @close="handleClose">
+  <n-card v-bind:title="this.name" closable @close="handleClose ">
     <template #cover class="cover"> 
       <vueper-slides fixed-height="240px" touchable="false" class="carousel-img">
         <vueper-slide v-for="(slide, i) in slides" :key="i" :image="slide.image"/>
       </vueper-slides>
     </template>
-    {{this.info}} 
+    <p>{{this.info}}</p> 
+     <div class="amenities-wrapper">
+        <template v-for="(value, j) in amenities" :key="j">
+          <div class="amenities" v-if="value=='TRUE'">{{j}}: <font-awesome-icon icon="check" /></div>
+          <div class="amenities" v-else-if="value=='FALSE'">{{j}}: <font-awesome-icon icon="xmark" /></div>
+          <div class="amenities" v-else>{{j}}: {{value}}</div>
+        </template>
+    </div>
   </n-card>
 </template>
 
 <script>
 import { NCard, NCarousel, NButton } from 'naive-ui';
 import { VueperSlides, VueperSlide } from 'vueperslides'
+import { library } from '@fortawesome/fontawesome-svg-core'
+import { faCheck, faXmark } from "@fortawesome/free-solid-svg-icons";
 import 'vueperslides/dist/vueperslides.css'
 
 import axios from "axios";
+library.add(faCheck, faXmark);
 
 /*
 <vueper-slides fade: touchable="false" >
@@ -43,7 +53,8 @@ export default {
       name: null,
       info: null,
       slides: null,
-      initSlide: 2
+      initSlide: 2,
+      amenities: null
     }
   },
 
@@ -54,11 +65,31 @@ export default {
   },
 
   methods: {
+    async populateAmenities(anemone){
+      Object.keys(anemone).forEach(key => {
+        if (key == "location" || key == "name" || key == "id" || key == "baseId" ||
+            key == "description" || key == "type" || anemone[key] === null){
+          delete anemone[key];
+        }
+        else{
+
+          let newKey = key.replace(/([A-Z])/g, ' $1') // Adding spaces to the camel cased keys
+                          //.replace(/^./, function(str){ return str.toUpperCase(); })
+          Object.defineProperty(anemone, newKey,
+              Object.getOwnPropertyDescriptor(anemone, key));
+          delete anemone[key]
+        }
+      })
+      return anemone;
+    },
+
     async populateInfo(infoGeo){
       const info = await axios.post(`http://localhost:4000/queries/${infoGeo.type}/${infoGeo.id}`)
-      this.name = info.data.name;
-      //this.name = infoGeo.name;
-      this.info = info.data.description
+      this.name = info.data.name; 
+      this.info = info.data.description;
+      let anemone= info.data;
+      this.amenities = await this.populateAmenities(anemone);
+      
       let imgRes = await axios.post(`http://localhost:4000/getParkImages`,{
         name: info.data.name,
         type: info.data.type,
@@ -108,18 +139,15 @@ export default {
     object-fit: cover;
   }
 
-  .loader {
-  border: 16px solid #f3f3f3; /* Light grey */
-  border-top: 16px solid #3498db; /* Blue */
-  border-radius: 50%;
-  width: 120px;
-  height: 120px;
-  animation: spin 2s linear infinite;
+  .amenities-wrapper {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    grid-template-rows: 1fr;
   }
 
-  @keyframes spin {
-    0% { transform: rotate(0deg); }
-    100% { transform: rotate(360deg); }
+  .amenities {
+    color: lightgray;
+    font-size: 12px;
   }
 
 </style>
