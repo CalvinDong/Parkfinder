@@ -70,7 +70,7 @@ export default {
       this.map.setTerrain({ 'source': 'mapbox-dem', 'exaggeration': 1.2 });
       this.removeLayers();
 
-      for (const filter in this.filters) { // Filters is what current layers are selected by user
+      for (const filter in this.filters) { // Filters is what current layers are selected by user (from the filter component)
         const layerColours = this.getPaint(this.filters[filter])
         
         this.map.addLayer({
